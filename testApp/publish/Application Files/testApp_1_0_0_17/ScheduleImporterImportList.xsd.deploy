@@ -1,0 +1,927 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:mstns="http://www.on-air-systems.com/playKast" elementFormDefault="qualified" targetNamespace="http://www.on-air-systems.com/playKast" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Schedule">
+    <xs:complexType>
+      <xs:sequence minOccurs="1" maxOccurs="1">
+        <xs:element minOccurs="1" maxOccurs="1" name="Group" type="mstns:ProgramGroup" />
+        <xs:element minOccurs="0" maxOccurs="1" name="DoNotCreateTopLevelGroup" type="xs:boolean" />
+      </xs:sequence>
+      <xs:attribute name="ScheduleID" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="StopMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Loop" />
+      <xs:enumeration value="StopOnLastFrame" />
+      <xs:enumeration value="None" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="GUID">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="KeyFrame">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+      <xs:element minOccurs="1" maxOccurs="1" name="Timing" type="mstns:TimeCode" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TimeFromEnd" type="xs:boolean" default="false" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CurrentTrack" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="OtherTracks" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfKeyFrames">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyFrame" type="mstns:KeyFrame" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AdInsertion">
+    <xs:sequence minOccurs="0" maxOccurs="1">
+      <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ID" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProgramItem" abstract="true">
+    <xs:sequence minOccurs="0" maxOccurs="1">
+      <xs:element minOccurs="0" maxOccurs="1" name="Title" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="StartDateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Label" nillable="true" type="xs:string" />
+      <xs:group minOccurs="0" maxOccurs="1" ref="mstns:Colors" />
+      <xs:element minOccurs="0" maxOccurs="1" name="UniqueIDGuid" type="mstns:GUID" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProgramGroup">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItem">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" name="PredictedDuration" nillable="true" type="mstns:TimeCode" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Items" nillable="true" type="mstns:ArrayOfItems" />
+          <xs:element minOccurs="0" maxOccurs="1" default="false" name="ExtendToPredictedDuration" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Notes" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" default="false" name="Loop" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Substreams" nillable="true" type="mstns:ArrayOfSubstreams" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Hotkeys" nillable="true" type="mstns:ArrayOfItems" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AdInsertion" nillable="true" type="mstns:AdInsertion" />
+          <xs:element minOccurs="0" maxOccurs="1" name="GroupGuid" default="{00000000-0000-0000-0000-000000000000}" type="mstns:GUID" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MergeID" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ProgramGroupFromFile">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramGroup">        
+        <xs:attribute name="FileName" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ProgramEvent" abstract="true">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItem">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" name="MetaData" type="mstns:Metadata" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Notes" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" default="false" name="IsCommercial" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="VideoTransition" type="mstns:Transition" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ScheduleID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Substreams" nillable="true" type="mstns:ArrayOfSubstreams" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Hotkeys" nillable="true" type="mstns:ArrayOfItems" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NamedTrigger" nillable="true" type="mstns:NamedTrigger" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AspectRatio" type="mstns:AspectRatio" default="Default/From metadata" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ConversionType" type="mstns:ConversionType" default="Default/From metadata" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="NamedTrigger">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+      <xs:element minOccurs="0" maxOccurs="1" default="false" name="Enabled" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" default="" name="Name" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="StartDateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="EndDateTime" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:group name="TrimInTrimOutGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" default="00:00:00:00" name="TrimIn" type="mstns:TimeCode" />
+      <xs:element minOccurs="0" maxOccurs="1" default="00:00:00:00" name="TrimOut" type="mstns:TimeCode" />
+    </xs:sequence>
+  </xs:group>
+  <xs:simpleType name="Color">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9a-fA-F]{6}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:group name="Colors">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="FontColor" type="mstns:Color" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BackColor" type="mstns:Color" />
+    </xs:sequence>
+  </xs:group>
+  <xs:complexType name="VideoProgramEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramEvent">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:group minOccurs="0" maxOccurs="1" ref="mstns:TrimInTrimOutGroup" />
+          <xs:element minOccurs="0" maxOccurs="1" name="StopMode" nillable="true" type="mstns:StopMode" />
+          <xs:element minOccurs="0" maxOccurs="1" default="1" name="RepeatCount" type="mstns:positiveInt" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Loop" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" default="00:00:00:00" name="PredictedDuration" type="mstns:TimeCode" />
+        </xs:sequence>
+        <xs:attribute name="FileName" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="OapkeProgramEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramEvent">
+        <xs:attribute name="FileName" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LiveProgramEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramEvent">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" default="1" name="RouterInputNumber" type="xs:unsignedInt" />
+          <xs:element minOccurs="0" maxOccurs="1" default="1" name="RouterPosition" type="mstns:positiveInt" />
+          <xs:element minOccurs="0" maxOccurs="1" name="StopMode" nillable="true" type="mstns:StopModeRestricted" />
+        </xs:sequence>
+        <xs:attribute name="Duration" type="mstns:TimeCode" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="StaticProgramEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramEvent">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" default="1" name="RepeatCount" type="mstns:positiveInt" />
+          <xs:element minOccurs="0" maxOccurs="1" default="None" name="StopMode" nillable="true" type="mstns:StopModeRestricted" />
+          <xs:element minOccurs="0" maxOccurs="1" default="false" name="Loop" type="xs:boolean" />
+        </xs:sequence>
+        <xs:attribute name="FileName" type="xs:string" use="required" />
+        <xs:attribute name="Duration" type="mstns:TimeCode" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AutoScheduleProgramEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramEvent">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" default="" name="Parameter" type="xs:string" />
+        </xs:sequence>
+        <xs:attribute name="PlugIn" use="required">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="Vote" />
+              <xs:enumeration value="InsertFileList" />
+              <xs:enumeration value="Clubland" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="VTRProgramEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramEvent">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:group minOccurs="0" maxOccurs="1" ref="mstns:TrimInTrimOutGroup" />
+          <xs:element minOccurs="1" maxOccurs="1" name="VTRNumber" type="mstns:positiveInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RouterPosition" type="mstns:RouterPositionInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TapeID" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TimeDelayProgramEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramEvent">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" name="Input" type="mstns:positiveInt" default="1" />
+        </xs:sequence>
+        <xs:attribute name="Time" type="xs:dateTime" use="required" />
+        <xs:attribute name="Duration" type="mstns:TimeCode" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="OverlayProgramEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramEvent">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" default="00:00:00:00" name="Duration" type="mstns:TimeCode" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Metadata">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MetadataPair" type="mstns:MetadataPair" />
+      <xs:element minOccurs="0" maxOccurs="1" name="IncludeInComingNextGroups" type="mstns:ArrayOfComingNextGroups" nillable="true" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MetadataPair">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Key" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Value" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfComingNextGroups">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="Group" type="mstns:ComingNextGroup" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ComingNextGroup">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Number" type="mstns:positiveInt" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfItems">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="Item" type="mstns:ProgramItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfSubstreams">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Substream" type="mstns:ProgramItemSubstream" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProgramItemSubstream" abstract="true">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" default="false" name="Default" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" default="false" name="AppearInLog" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GraphicSubstream">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItemSubstream">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" default="Default" name="Name" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Position" type="mstns:GraphicPosition" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Event" type="mstns:GraphicSubstreamEvent" />
+        </xs:sequence>
+        <xs:attribute name="GraphicStreamType" use="required">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="GraphicStream1" />
+              <xs:enumeration value="GraphicStream2" />
+              <xs:enumeration value="GraphicStream3" />
+              <xs:enumeration value="GraphicStream4" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ProfanityBlankingSubstream">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItemSubstream">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Event" type="mstns:ProfanityBlankingSubstreamEvent" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AFDSubstream">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItemSubstream">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Event" type="mstns:AFDSubstreamEvent" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GraphicPosition">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" default="0" name="Left" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" default="0" name="Top" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Layer" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" default="576" name="Height" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" default="720" name="Width" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SubstreamEvent" abstract="true">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="StartAt" nillable="true" type="mstns:TimeCode" />
+      <xs:element minOccurs="0" maxOccurs="1" name="StartAtFromEnd" default="false" nillable="false" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Duration" nillable="true" type="mstns:TimeCode" />
+      <xs:element minOccurs="0" maxOccurs="1" name="EndAt" nillable="true" type="mstns:TimeCode" />
+      <xs:element minOccurs="0" maxOccurs="1" name="EndAtFromEnd" default="true" nillable="false" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" default="false" name="IsCommercial" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="EventID" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" default="false" name="ApplyToAllEvents" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AFDSubstreamEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:SubstreamEvent">
+        <xs:sequence>
+          <xs:group minOccurs="0" maxOccurs="1" ref="mstns:TrimInTrimOutGroup" />
+        </xs:sequence>
+        <xs:attribute name="AFDString" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GraphicSubstreamEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:SubstreamEvent">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Transitions" type="mstns:Transitions" />
+          <xs:element minOccurs="0" maxOccurs="1" default="false" name="StopOnTheLastFrame" type="xs:boolean" />
+          <xs:group minOccurs="0" maxOccurs="1" ref="mstns:TrimInTrimOutGroup" />
+        </xs:sequence>
+        <xs:attribute name="FileName" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ProfanityBlankingSubstreamEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:SubstreamEvent">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" default="None" name="BlankElements" type="mstns:ProfanityBlankingType" />
+          <xs:element minOccurs="0" maxOccurs="1" default="" name="BlankingFile" type="xs:string" />
+          <xs:group minOccurs="0" maxOccurs="1" ref="mstns:TrimInTrimOutGroup" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="ProfanityBlankingType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Video" />
+      <xs:enumeration value="Audio" />
+      <xs:enumeration value="Video and audio" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Transitions">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="InTransition" type="mstns:Transition" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ClearTransition" type="mstns:Transition" />
+      <xs:element minOccurs="0" maxOccurs="1" default="false" name="DefineTransitionsFromVideo" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MatroxDSXData">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+      <xs:element minOccurs="1" maxOccurs="1" name="Name" type="mstns:MatroxDSXTransitionType" />
+      <xs:element minOccurs="0" maxOccurs="1" default="false" name="Reversed" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BorderWidth" type="mstns:BorderWidthAndSoftness" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BorderSoftness" type="mstns:BorderWidthAndSoftness" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BorderSoftnessBalance" type="mstns:BorderSoftnessBalance" />
+      <xs:element minOccurs="0" maxOccurs="1" default="false" name="BorderSoftnessLinear" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BorderColor" type="mstns:Color" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GraphicsTransitionData">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+      <xs:element minOccurs="1" maxOccurs="1" name="Offset" type="mstns:TimeCode" />
+      <xs:element minOccurs="1" maxOccurs="1" name="GraphicsDuration" type="mstns:TimeCode" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Filename" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="BorderWidthAndSoftness">
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0" />
+      <xs:maxInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="BorderSoftnessBalance">
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="-1" />
+      <xs:maxInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TransitionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ttCut" />
+      <xs:enumeration value="ttDissolve" />
+      <xs:enumeration value="ttMatrox" />
+      <xs:enumeration value="ttGraphicsWipe" />
+      <xs:enumeration value="ttCrawl" />
+      <xs:enumeration value="ttRoll" />
+      <xs:enumeration value="ttDSX" />
+      <xs:enumeration value="ttWipe" />
+      <xs:enumeration value="ttSqueeze" />
+      <xs:enumeration value="ttVanish" />
+      <xs:enumeration value="ttHorizontalFlip" />
+      <xs:enumeration value="ttVerticalFlip" />
+      <xs:enumeration value="ttGraphics" />
+      <xs:enumeration value="ttCutFade" />
+      <xs:enumeration value="ttFadeCut" />
+      <xs:enumeration value="ttFade" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TransitionKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="tkWipe" />
+      <xs:enumeration value="tkPush" />
+      <xs:enumeration value="tkPushOver" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TransitionDirection">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="tdLeft" />
+      <xs:enumeration value="tdRight" />
+      <xs:enumeration value="tdUp" />
+      <xs:enumeration value="tdDown" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MatroxDSXTransitionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SMPTE\SMPTE 01" />
+      <xs:enumeration value="SMPTE\SMPTE 02" />
+      <xs:enumeration value="SMPTE\SMPTE 03" />
+      <xs:enumeration value="SMPTE\SMPTE 04" />
+      <xs:enumeration value="SMPTE\SMPTE 05" />
+      <xs:enumeration value="SMPTE\SMPTE 06" />
+      <xs:enumeration value="SMPTE\SMPTE 07" />
+      <xs:enumeration value="SMPTE\SMPTE 08" />
+      <xs:enumeration value="SMPTE\SMPTE 09" />
+      <xs:enumeration value="SMPTE\SMPTE 10" />
+      <xs:enumeration value="SMPTE\SMPTE 11" />
+      <xs:enumeration value="SMPTE\SMPTE 12" />
+      <xs:enumeration value="SMPTE\SMPTE 13" />
+      <xs:enumeration value="SMPTE\SMPTE 14" />
+      <xs:enumeration value="SMPTE\SMPTE 15" />
+      <xs:enumeration value="SMPTE\SMPTE 16" />
+      <xs:enumeration value="SMPTE\SMPTE 17" />
+      <xs:enumeration value="SMPTE\SMPTE 18" />
+      <xs:enumeration value="SMPTE\SMPTE 19" />
+      <xs:enumeration value="SMPTE\SMPTE 20" />
+      <xs:enumeration value="SMPTE\SMPTE 21" />
+      <xs:enumeration value="SMPTE\SMPTE 22" />
+      <xs:enumeration value="SMPTE\SMPTE 23" />
+      <xs:enumeration value="SMPTE\SMPTE 24" />
+      <xs:enumeration value="SMPTE\SMPTE 25" />
+      <xs:enumeration value="SMPTE\SMPTE 26" />
+      <xs:enumeration value="SMPTE\SMPTE 27" />
+      <xs:enumeration value="SMPTE\SMPTE 28" />
+      <xs:enumeration value="SMPTE\SMPTE 29" />
+      <xs:enumeration value="SMPTE\SMPTE 30" />
+      <xs:enumeration value="SMPTE\SMPTE 77" />
+      <xs:enumeration value="Gradients\Basket" />
+      <xs:enumeration value="Gradients\Bend In Time" />
+      <xs:enumeration value="Gradients\Cuts Linear" />
+      <xs:enumeration value="Gradients\Cuts Radial" />
+      <xs:enumeration value="Gradients\Diamond Bands 01" />
+      <xs:enumeration value="Gradients\Diamond Bands 02" />
+      <xs:enumeration value="Gradients\Diamond Bands 03" />
+      <xs:enumeration value="Gradients\Fabric Of Time" />
+      <xs:enumeration value="Gradients\Fossile" />
+      <xs:enumeration value="Gradients\Gradient Pattern 01" />
+      <xs:enumeration value="Gradients\Gradient Pattern 02" />
+      <xs:enumeration value="Gradients\Gradient Pattern 03" />
+      <xs:enumeration value="Gradients\Gradient Pattern 04" />
+      <xs:enumeration value="Gradients\Gradient Pattern 05" />
+      <xs:enumeration value="Gradients\Gradient Pattern 06" />
+      <xs:enumeration value="Gradients\Horizontal Gradient Wave" />
+      <xs:enumeration value="Gradients\Horizontal Gradient" />
+      <xs:enumeration value="Gradients\Horizontal Vertical Gradient" />
+      <xs:enumeration value="Gradients\Sound Booth " />
+      <xs:enumeration value="Gradients\Star Lines" />
+      <xs:enumeration value="Gradients\Vertical Gradient Wave" />
+      <xs:enumeration value="Gradients\Vertical Gradient" />
+      <xs:enumeration value="Gradients\Vertical Horizontal Gradient Wave" />
+      <xs:enumeration value="Gradients\Vertical Horizontal Gradient" />
+      <xs:enumeration value="Shapes\Blocks" />
+      <xs:enumeration value="Shapes\Bubbles" />
+      <xs:enumeration value="Shapes\Butterflies Sharp" />
+      <xs:enumeration value="Shapes\Butterflies Soft" />
+      <xs:enumeration value="Shapes\Cell Radial" />
+      <xs:enumeration value="Shapes\Curly Cues" />
+      <xs:enumeration value="Shapes\Dots Dots Dots" />
+      <xs:enumeration value="Shapes\Geometric 01 Noise" />
+      <xs:enumeration value="Shapes\Geometric 01" />
+      <xs:enumeration value="Shapes\Geometric 02 Noise" />
+      <xs:enumeration value="Shapes\Geometric 02" />
+      <xs:enumeration value="Shapes\Geometric 03 Noise" />
+      <xs:enumeration value="Shapes\Geometric 03" />
+      <xs:enumeration value="Shapes\Geometric 04 Noise" />
+      <xs:enumeration value="Shapes\Geometric 04" />
+      <xs:enumeration value="Shapes\Hearts" />
+      <xs:enumeration value="Shapes\Ripple Alien" />
+      <xs:enumeration value="Shapes\Ripple Smooth" />
+      <xs:enumeration value="Shapes\Ripple" />
+      <xs:enumeration value="Shapes\Sponge" />
+      <xs:enumeration value="Abstract\Abstract" />
+      <xs:enumeration value="Abstract\Birds Nest" />
+      <xs:enumeration value="Abstract\Clowns Amuk" />
+      <xs:enumeration value="Abstract\Downfeathers 01" />
+      <xs:enumeration value="Abstract\Downfeathers 02" />
+      <xs:enumeration value="Abstract\Epi Cell" />
+      <xs:enumeration value="Abstract\Floating Diamonds" />
+      <xs:enumeration value="Abstract\Glasscubes" />
+      <xs:enumeration value="Abstract\Hypnotic Square Ripples" />
+      <xs:enumeration value="Abstract\Lines Erode" />
+      <xs:enumeration value="Abstract\Liquified Patches" />
+      <xs:enumeration value="Abstract\Liquified Smooth" />
+      <xs:enumeration value="Abstract\Liquified" />
+      <xs:enumeration value="Abstract\Marble Tiles" />
+      <xs:enumeration value="Abstract\Rain" />
+      <xs:enumeration value="Abstract\Wall" />
+      <xs:enumeration value="Abstract\Watermarks" />
+      <xs:enumeration value="Abstract\Writing On The Wall" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="AudioSubstream">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItemSubstream">
+        <xs:sequence>
+          <xs:element maxOccurs="1" default="Track #1" name="Name">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="Track #1" />
+                <xs:enumeration value="Track #2" />
+                <xs:enumeration value="Track #3" />
+                <xs:enumeration value="Track #4" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Event" type="mstns:AudioSubstreamEvent" />
+        </xs:sequence>
+        <xs:attribute name="AudioChannel" use="required">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="RecordableAudioChannel1" />
+              <xs:enumeration value="RecordableAudioChannel2" />
+              <xs:enumeration value="RecordableAudioChannel3" />
+              <xs:enumeration value="RecordableAudioChannel4" />
+              <xs:enumeration value="RecordableAudioChannel5" />
+              <xs:enumeration value="RecordableAudioChannel6" />
+              <xs:enumeration value="RecordableAudioChannel7" />
+              <xs:enumeration value="RecordableAudioChannel8" />
+              <xs:enumeration value="NonRecordableAudioChannel1" />
+              <xs:enumeration value="NonRecordableAudioChannel2" />
+              <xs:enumeration value="NonRecordableAudioChannel3" />
+              <xs:enumeration value="NonRecordableAudioChannel4" />
+              <xs:enumeration value="NonRecordableAudioChannel5" />
+              <xs:enumeration value="NonRecordableAudioChannel6" />
+              <xs:enumeration value="NonRecordableAudioChannel7" />
+              <xs:enumeration value="NonRecordableAudioChannel8" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AudioSubstreamEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:SubstreamEvent">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Transitions" type="mstns:Transitions" />
+          <xs:element minOccurs="0" maxOccurs="1" default="false" name="Live" type="xs:boolean" />
+          <xs:group minOccurs="0" maxOccurs="1" ref="mstns:TrimInTrimOutGroup" />
+          <xs:element minOccurs="0" maxOccurs="1" name="KeyFrames" type="mstns:ArrayOfKeyFrames" />
+          <xs:element minOccurs="0" maxOccurs="1" default="0" name="RouterInputNumber" type="xs:unsignedInt" />
+          <xs:element minOccurs="0" maxOccurs="1" default="0" name="StreamIndex" type="xs:unsignedInt" />
+        </xs:sequence>
+        <xs:attribute name="FileName" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TriggerSubstream">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItemSubstream">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Event" type="mstns:TriggerSubstreamEvent" />
+          <xs:element minOccurs="1" maxOccurs="1" default="0" name="StreamIndex" type="mstns:StreamIndex" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TriggerSubstreamEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:SubstreamEvent">
+        <xs:sequence>
+          <xs:element name="TriggerMessage">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="StartMessage" type="xs:string" />
+                <xs:element name="EndMessage" type="xs:string" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CaptureSubstream">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItemSubstream">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Event" type="mstns:CaptureSubstreamEvent" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CaptureSubstreamEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:SubstreamEvent">
+        <xs:sequence />
+        <xs:attribute name="FileName" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="WSSSubstream">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItemSubstream">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Event" type="mstns:WSSSubstreamEvent" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="WSSSubstreamEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:SubstreamEvent">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Insert" type="mstns:WSSEntry" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Modify" type="mstns:WSSEntry" />
+        </xs:sequence>
+        <xs:attribute name="Operation" use="required">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="No change" />
+              <xs:enumeration value="Blank" />
+              <xs:enumeration value="Insert" />
+              <xs:enumeration value="Modify" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GPISubstream">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItemSubstream">
+        <xs:sequence>
+          <xs:element maxOccurs="1" default="GPI #0" name="Name">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="GPI #0" />
+                <xs:enumeration value="GPI #1" />
+                <xs:enumeration value="GPI #2" />
+                <xs:enumeration value="GPI #3" />
+                <xs:enumeration value="GPI #4" />
+                <xs:enumeration value="GPI #5" />
+                <xs:enumeration value="GPI #6" />
+                <xs:enumeration value="GPI #7" />
+                <xs:enumeration value="GPI #8" />
+                <xs:enumeration value="GPI #9" />
+                <xs:enumeration value="GPI #10" />
+                <xs:enumeration value="GPI #11" />
+                <xs:enumeration value="GPI #12" />
+                <xs:enumeration value="GPI #13" />
+                <xs:enumeration value="GPI #14" />
+                <xs:enumeration value="GPI #15" />
+                <xs:enumeration value="GPI #16" />
+                <xs:enumeration value="GPI #17" />
+                <xs:enumeration value="GPI #18" />
+                <xs:enumeration value="GPI #19" />
+                <xs:enumeration value="GPI #20" />
+                <xs:enumeration value="GPI #21" />
+                <xs:enumeration value="GPI #22" />
+                <xs:enumeration value="GPI #23" />
+                <xs:enumeration value="GPI #24" />
+                <xs:enumeration value="GPI #25" />
+                <xs:enumeration value="GPI #26" />
+                <xs:enumeration value="GPI #27" />
+                <xs:enumeration value="GPI #28" />
+                <xs:enumeration value="GPI #29" />
+                <xs:enumeration value="GPI #30" />
+                <xs:enumeration value="GPI #31" />
+                <xs:enumeration value="GPI #32" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Event" type="mstns:GPISubstreamEvent" />
+          <xs:element minOccurs="1" maxOccurs="1" name="GPIDevice" type="mstns:StreamIndex" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GPISubstreamEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:SubstreamEvent">
+        <xs:sequence />
+        <xs:attribute name="GPIState" use="required">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="GPIUp" />
+              <xs:enumeration value="GPIDown" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SqueezeSubstream">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItemSubstream">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Event" type="mstns:SqueezeSubstreamEvent" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Position" type="mstns:SqueezeSubstreamPosition" />
+        </xs:sequence>
+        <xs:attribute name="SqueezeStreamType" use="required">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="SqueezeStream1" />
+              <xs:enumeration value="SqueezeStream2" />
+              <xs:enumeration value="SqueezeStream3" />
+              <xs:enumeration value="SqueezeStream4" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="TimeCode">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="^([01]\d|2[0-3]):([0-5]\d):([0-5]\d):([01]\d|2[0-4])$" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SqueezeSubstreamPosition">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" default="0" name="Left" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" default="0" name="Top" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" default="576" name="Height" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" default="720" name="Width" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SqueezeSubstreamEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:SubstreamEvent">
+        <xs:sequence>
+          <xs:group minOccurs="0" maxOccurs="1" ref="mstns:TrimInTrimOutGroup" />
+          <xs:element minOccurs="0" maxOccurs="1" name="InTransition" type="mstns:SqueezeTransition" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ClearTransition" type="mstns:SqueezeTransition" />
+          <xs:element minOccurs="0" maxOccurs="1" default="false" name="Live" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" default="1" name="RouterPosition" type="mstns:RouterPositionInt" />
+          <xs:element minOccurs="0" maxOccurs="1" name="EventToWindow" type="xs:boolean" />
+        </xs:sequence>
+        <xs:attribute name="FileName" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RouterSubstream">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItemSubstream">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Event" type="mstns:RouterSubstreamEvent" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RouterSubstreamEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:SubstreamEvent">
+        <xs:sequence>
+          <xs:element name="Command" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SqueezeTransition">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="StartPosition" type="mstns:SqueezeSubstreamPosition" />
+      <xs:element minOccurs="0" maxOccurs="1" name="EndPosition" type="mstns:SqueezeSubstreamPosition" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TransitionDuration" type="mstns:TimeCode" />
+      <xs:element minOccurs="0" maxOccurs="1" default="255" name="StartAlpha" type="mstns:AlphaValue" />
+      <xs:element minOccurs="0" maxOccurs="1" default="255" name="EndAlpha" type="mstns:AlphaValue" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Transition">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+      <xs:element minOccurs="1" maxOccurs="1" default="ttCut" name="Type" type="mstns:TransitionType" />
+      <xs:element minOccurs="0" maxOccurs="1" default="00:00:00:00" name="Duration" type="mstns:TimeCode" />
+      <xs:element minOccurs="0" maxOccurs="1" default="false" name="Loop" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" default="1" name="Speed" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" default="false" name="LeftToRight" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" default="false" name="TopToBottom" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" default="tkWipe" name="Kind" type="mstns:TransitionKind" />
+      <xs:element minOccurs="0" maxOccurs="1" default="tdLeft" name="Direction" type="mstns:TransitionDirection" />
+      <xs:element minOccurs="0" maxOccurs="1" name="MatroxDSXData" type="mstns:MatroxDSXData" />
+      <xs:element minOccurs="0" maxOccurs="1" name="GraphicsTransitionData" type="mstns:GraphicsTransitionData" />
+      <xs:element minOccurs="0" maxOccurs="1" default="00:00:00:00" name="InDuration" type="mstns:TimeCode" />
+      <xs:element minOccurs="0" maxOccurs="1" default="00:00:00:00" name="OutDuration" type="mstns:TimeCode" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="StopModeRestricted">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="ExtendMode" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="AlphaValue">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="0" />
+      <xs:maxInclusive value="255" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!--xsd.exe tool converts xs:positiveInteger to string, so this type must remain here-->
+  <xs:simpleType name="positiveInt">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!--xsd.exe tool converts xs:positiveInteger to string, so this type must remain here-->
+  <xs:simpleType name="RouterPositionInt">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="AspectRatio">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="4:3" />
+      <xs:enumeration value="16:9" />
+      <xs:enumeration value="Default/From metadata" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="FrameFormat">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="4:3" />
+      <xs:enumeration value="16:9" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ConversionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Crop" />
+      <xs:enumeration value="Add border" />
+      <xs:enumeration value="Default/From metadata" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="WSSOthers">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="SurroundSoundMode" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CopyRightAsserted" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CopyingRestricted" nillable="true" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="WSSEnhancedServices">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="FilmMode" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="MotionAdaptiveColourPlus" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ModulatedHelper" nillable="true" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="WSSEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Others" type="mstns:WSSOthers" />
+      <xs:element minOccurs="0" maxOccurs="1" name="EnhancedServices" type="mstns:WSSEnhancedServices" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Subtitles" type="mstns:WSSSubtitles" />
+    </xs:sequence>
+    <xs:attribute name="AspectRatio" type="mstns:WSSAspectRatio" use="required" />
+  </xs:complexType>
+  <xs:simpleType name="WSSAspectRatio">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Full Format 4:3" />
+      <xs:enumeration value="Box 14:9 Centre" />
+      <xs:enumeration value="Box 14:9 Top" />
+      <xs:enumeration value="Box 16:9 Centre" />
+      <xs:enumeration value="Box 16:9 Top" />
+      <xs:enumeration value="Box &gt; 16:9 Centre" />
+      <xs:enumeration value="Full Format 4:3 (Shoot and protect 14:9 Centre)" />
+      <xs:enumeration value="Full Format 16:9 (Anamorphic)" />
+      <xs:enumeration value="No Change" />
+      <xs:enumeration value="From playlist" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="WSSSubtitlesType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="No Open Subtitles" />
+      <xs:enumeration value="Subtitles in Active Image Area" />
+      <xs:enumeration value="Subtitles out of Active Image Area" />
+      <xs:enumeration value="No Change" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="WSSSubtitles">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="SubtitleswithinTeletext" nillable="true" type="xs:boolean" />
+    </xs:sequence>
+    <xs:attribute name="Type" type="mstns:WSSSubtitlesType" use="required" />
+  </xs:complexType>
+  <xs:complexType name="SubtitlesSubstream">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:ProgramItemSubstream">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Event" type="mstns:SubtitlesSubstreamEvent" />
+          <xs:element minOccurs="0" maxOccurs="1" name="StreamIndex" type="mstns:StreamIndex" />
+          <xs:element minOccurs="0" maxOccurs="1" default="0" name="SubstreamIndex" type="mstns:StreamIndex" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SubtitlesSubstreamEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="mstns:SubstreamEvent">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="FileName" type="xs:string" />
+          <xs:group minOccurs="0" maxOccurs="1" ref="mstns:TrimInTrimOutGroup" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="StreamIndex">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

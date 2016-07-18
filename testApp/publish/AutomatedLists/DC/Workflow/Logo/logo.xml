@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterstitalEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <XmlLogos>
+    <Logos Duration="10" FileName="D00005_0001_01_DISCOVERY_Gold_10s_Bumper_169.mov" />
+    <Logos Duration="10" FileName="D00012_0001_01_DISCOVERY_Ice_10s_Bumper_169.mov" />
+    <Logos Duration="10" FileName="D00016_0001_01_DISCOVERY_Man Made_10s_Bumper_169.mov" />
+    <Logos Duration="7" FileName="D00002_0001_01_DISCOVERY_Fire_7s_Bumper_169.mov" />
+    <Logos Duration="3" FileName="D00001_0001_01_DISCOVERY_Fire_3s_Bumper_169.mov" />
+    <Logos Duration="5" FileName="D00003_0001_01_DISCOVERY_Gold_5s_Bumper_169 .mov" />
+    <Logos Duration="6" FileName="D00004_0001_01_DISCOVERY_Gold_6s_Bumper_169.mov" />
+    <Logos Duration="9" FileName="D00006_0001_01_DISCOVERY_Gold_9s_Bumper_169.mov" />
+    <Logos Duration="3" FileName="D00007_0001_01_DISCOVERY_Hero_3s_Bumper_169.mov" />
+    <Logos Duration="7" FileName="D00008_0001_01_DISCOVERY_Hero_7s_Bumper_169.mov" />
+    <Logos Duration="4" FileName="D00009_0001_01_DISCOVERY_Ice_4s_Bumper_169.mov" />
+    <Logos Duration="6" FileName="D00010_0001_01_DISCOVERY_Ice_6s_Bumper_169.mov" />
+    <Logos Duration="8" FileName="D00011_0001_01_DISCOVERY_Ice_8s_Bumper_169.mov" />
+    <Logos Duration="4" FileName="D00013_0001_01_DISCOVERY_Magic_4s_Bumper_169.mov" />
+    <Logos Duration="8" FileName="D00014_0001_01_DISCOVERY_Magic_8s_Bumper_169.mov" />
+    <Logos Duration="4" FileName="D00017_0001_01_DISCOVERY_Man Made_4s_Bumper_169.mov" />
+    <Logos Duration="6" FileName="D00018_0001_01_DISCOVERY_Man Made_6s_Bumper_169.mov" />
+    <Logos Duration="8" FileName="D00015_0001_01_DISCOVERY_Man Made_8s_Bumper_169.mov" />
+    <Logos Duration="5" FileName="D00019_0001_01_DISCOVERY_Survival_5s_Bumper_169.mov" />
+    <Logos Duration="9" FileName="D00020_0001_01_DISCOVERY_Survival_9s_Bumper_169.mov" />
+    <Logos Duration="5" FileName="D00021_0001_01_DISCOVERY_TTC_5s_Bumper_169.mov" />
+    <Logos Duration="9" FileName="D00022_0001_01_DISCOVERY_TTC_9s_Bumper_169.mov" />
+    <Logos Duration="3" FileName="D00024_0001_01_DISCOVERY_Water_3s_Bumper_169.mov" />
+    <Logos Duration="7" FileName="D00023_0001_01_DISCOVERY_Water_7s_Bumper_169.mov" />
+  </XmlLogos>
+  <XmlFillers />
+</InterstitalEvent>

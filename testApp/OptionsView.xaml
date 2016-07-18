@@ -1,0 +1,170 @@
+﻿<Window x:Class="testApp.OptionsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:testApp"
+        mc:Ignorable="d"
+        Title="Options" SizeToContent="WidthAndHeight" Height="450" Width="400">
+    <Window.Resources>
+        <Style x:Key="datagridStyle" TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="True"/>
+        </Style>
+        <ObjectDataProvider x:Key="transistionEnum" MethodName="GetValues"  
+                            ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:TransitionType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <TabControl>
+        <TabItem Header="General">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1" Margin="1" Orientation="Horizontal">
+                    <Label x:Name="lbl_openDefaultLocation" Content="Open Default Location:" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBox x:Name="tb_openLocation" Width="Auto" HorizontalAlignment="Left"/>
+                    <Button x:Name="btn_openLocation" Command="{Binding Path=OpenDefaultLocationCommand}" Content="..." Width="30" Margin="2"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Margin="1" Orientation="Horizontal">
+                    <Label x:Name="lbl_saveDefaultLocation" Content="Save Default Location:" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBox x:Name="tb_saveLocation" Width="Auto" HorizontalAlignment="Left"/>
+                    <Button x:Name="btn_saveLocation" Command="{Binding Path=SaveDefaultLocationCommand}" Content="..." Width="30" Margin="2"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Margin="1" Orientation="Horizontal">
+                    <Label x:Name="lbl_cnsweStartTime" Content="CN SWE Starttime format: hh:mm:ss.ff:" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBox x:Name="tb_cnsweStartTime" Width="Auto" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Grid.Row="4" Orientation="Horizontal">
+                    <Label x:Name="lbl_startRows" Content="Start Rows:" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" />
+                </StackPanel>
+                <StackPanel Grid.Row="5" Margin="1" Orientation="Horizontal">
+                    <Label x:Name="lbl_commercialRow" Content="Commercials:"/>
+                    <Label x:Name="lbl_cnsweComStartRow" Content="CNSWE:"/>
+                    <TextBox x:Name="tb_cnsweComStartRow" Width="Auto" HorizontalAlignment="Left"/>
+                    <Label x:Name="lbl_dcComStartRow" Content="DC:"/>
+                    <TextBox x:Name="tb_dcComStartRow" Width="Auto" HorizontalAlignment="Left"/>
+                    <Label x:Name="lbl_tlcComStartRow" Content="TLC:"/>
+                    <TextBox x:Name="tb_tlcComStartRow" Width="Auto" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Grid.Row="6" Margin="1" Orientation="Horizontal">
+                    <Label x:Name="lbl_scheduleRow" Content="Schedule:"/>
+                    <Label x:Name="lbl_dcScheduleStartRow" Content="DC:"/>
+                    <TextBox x:Name="tb_dcScheduleStartRow" Width="Auto" HorizontalAlignment="Left"/>
+                    <Label x:Name="lbl_tlcScheduleStartRow" Content="TLC:"/>
+                    <TextBox x:Name="tb_tlcScheduleStartRow" Width="Auto" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Grid.Row="7" Orientation="Vertical">
+                    <Label x:Name="lbl_tlcdcCondition" Content="TLCDC Conditions:" FontWeight="Bold"/>
+                    <TextBlock HorizontalAlignment="Left" x:Name="tb_tlcdcCondition" Margin="2" Width="400" Text="Hint! Necessary to compare Promotions. Must contain specific word. For Example: SURVIVAL. StartIdex marks the place where the special word starts and Length will mark the length of the word." TextWrapping="Wrap" FontFamily="Arial" Foreground="White" Background="Black" Opacity="0.75"/>
+                </StackPanel>
+                <StackPanel Grid.Row="8" Margin="1" Orientation="Horizontal">
+                    <Label x:Name="lbl_dcConditions" Content="DC Conditions: " FontWeight="Bold"/>
+                    <Label x:Name="lbl_dcConditionStartIndex" Content="Condition StartIndex:"/>
+                    <TextBox x:Name="tb_dcConditionStartIndex" Text="{Binding Path=DCConditionStartIndex, UpdateSourceTrigger=PropertyChanged}" Width="Auto" HorizontalAlignment="Left"/>
+                    <Label x:Name="lbl_dcConfitionLength" Content="Condition Length:"/>
+                    <TextBox x:Name="tb_dcConfitionLength" Text="{Binding Path=DCConditionLength, UpdateSourceTrigger=PropertyChanged}" Width="Auto" HorizontalAlignment="Left"/>
+                    <Label x:Name="lbl_dcSubStringTest" Content="Example Result:"/>
+                    <TextBox x:Name="tb_dcSubStringText" Grid.Row="1" Grid.Column="0"
+                 TextWrapping="Wrap" Text="{Binding Path=DCSubStringText, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="9" Margin="1" Orientation="Horizontal">
+                    <Label x:Name="lbl_tlcConditions" Content="TLC Conditions: " FontWeight="Bold"/>
+                    <Label x:Name="lbl_tlcConditionStartIndex" Content="Condition StartIndex:"/>
+                    <TextBox x:Name="tb_tlcConditionStartIndex" Text="{Binding Path=TLConditionStartIndex, UpdateSourceTrigger=PropertyChanged}" Width="Auto" HorizontalAlignment="Left"/>
+                    <Label x:Name="lbl_tlcConfitionLength" Content="Condition Length:"/>
+                    <TextBox x:Name="tb_tlcConfitionLength" Text="{Binding Path=TLCConditionLength, UpdateSourceTrigger=PropertyChanged}" Width="Auto" HorizontalAlignment="Left"/>
+                    <Label x:Name="lbl_tlcSubStringTest" Content="Example Result:"/>
+                    <TextBox x:Name="tb_tlcSubStringText" Grid.Row="1" Grid.Column="0"
+                 TextWrapping="Wrap" Text="{Binding Path=TLCSubStringText, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="10" Margin="1" Orientation="Vertical" Width="100" HorizontalAlignment="Left">
+                    <CheckBox x:Name="cb_useTransistion" Content="Use Transistion" IsChecked="{Binding UseTransistion ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock x:Name="lbl_eventTransistionDuration" TextWrapping="Wrap" Text="Transistion Duration format: hh:mm:ss:ff:"/>
+                    <TextBox Width="100" HorizontalAlignment="Left" x:Name="tb_eventTransistionDuration" IsEnabled="{Binding ElementName=cb_useTransistion, Path=IsChecked}" />
+                    <Label x:Name="lbl_eventTransistion" Content="Transistion Type"/>
+                    <ComboBox Width="100" HorizontalAlignment="Left" x:Name="cmb_eventTransistion" IsEnabled="{Binding ElementName=cb_useTransistion, Path=IsChecked}" ItemsSource="{Binding Source={StaticResource transistionEnum}}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="11" Margin="1" Orientation="Horizontal">
+                    <Button x:Name="btn_applyOptions"  Command="{Binding Path=ApplyOptionsCommand}" Content="Apply Options"/>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+        <TabItem Header="TLC/DC Audios" x:Name="tab_tlcdcAudios">
+            <Grid Height="450" Width="400">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="160"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1" Margin="1" Orientation="Horizontal">
+                    <CheckBox x:Name="cb_useRussianAudios" Content="Use Russian Audios" IsChecked="{Binding UseRusAudios ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Margin="1" Orientation="Horizontal">
+                    <Label x:Name="lbl_rusAudio" Content="Russian Audio Extension:" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBox x:Name="tb_rusAudio" Width="Auto" HorizontalAlignment="Left"/>
+                    <Label x:Name="lbl_estAudio" Content="Estonia Audio Extension:" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBox x:Name="tb_estAudio" Width="Auto" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Name="dgvStackPanel" Grid.Row="2" Margin="0">
+                    <DataGrid x:Name="dgv_openAudios" Background="AntiqueWhite" Style="{StaticResource datagridStyle}" Height="160" BorderBrush="Black">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Containing name" Binding="{Binding FileName}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Margin="2" Orientation="Horizontal">
+                    <Button x:Name="btn_applyAudios"  Command="{Binding Path=ApplyAudiosCommand}" Content="Apply Audios"/>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+        <TabItem Header="DC ID" x:Name="tab_dcID">
+            <Grid Height="450" Width="400">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Margin="1" Orientation="Vertical">
+                    <Label x:Name="lbl_commercialReader" Content="For Commercial Reader:" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <CheckBox x:Name="cb_useFindReplace" Content="Use Find/Replace" IsChecked="{Binding UseFindReplace ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Margin="1" Orientation="Horizontal">
+                    <Label x:Name="lbl_findWord" Content="Find word:" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBox x:Name="tb_findWord" Width="Auto" HorizontalAlignment="Left"/>
+                    <Label x:Name="lbl_replaceWord" Content="Replace word:" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBox x:Name="tb_replaceWord" Width="Auto" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Margin="1" Orientation="Horizontal">
+                    <CheckBox x:Name="cb_useDCIDAudioExtension" Content="Use Audio Extension" IsChecked="{Binding UseDCIDAudioExtension ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Margin="1" Orientation="Horizontal">
+                    <Label x:Name="lbl_dcIDAudioExtension" Content="Audio Extension:" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBox x:Name="tb_dcIDAudioExtension" Width="Auto" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Grid.Row="4" Margin="2" Orientation="Horizontal">
+                    <Button x:Name="btn_applyDCID"  Command="{Binding Path=ApplyDCIDCommand}" Content="Apply Changes"/>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>

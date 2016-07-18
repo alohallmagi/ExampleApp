@@ -1,0 +1,9 @@
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\testApp\test1\bin\Debug\ScheduleImporterImportList.xsd
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\testApp\test1\bin\Debug\test1.exe.config
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\testApp\test1\bin\Debug\test1.exe
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\testApp\test1\bin\Debug\test1.pdb
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\testApp\test1\bin\Debug\testApp.exe
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\testApp\test1\bin\Debug\testApp.pdb
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\testApp\test1\obj\Debug\test1.csprojResolveAssemblyReference.cache
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\testApp\test1\obj\Debug\test1.exe
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\testApp\test1\obj\Debug\test1.pdb

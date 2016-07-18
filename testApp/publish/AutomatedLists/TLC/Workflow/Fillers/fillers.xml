@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterstitalEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <XmlLogos />
+  <XmlFillers>
+    <Fillers Duration="60" FileName="D00065_0001_01_TLC_WEDDING 60_Filler_169.mov" />
+    <Fillers Duration="30" FileName="D00064_0001_01_TLC_WEDDING 30_Filler_169.mov" />
+    <Fillers Duration="15" FileName="D00063_0001_01_TLC_WEDDING 15_Filler_169.mov" />
+    <Fillers Duration="15" FileName="D00066_0001_01_TLC_CAKE 15_Filler_169.mov" />
+    <Fillers Duration="30" FileName="D00067_0001_01_TLC_CAKE 30_Filler_169.mov" />
+    <Fillers Duration="60" FileName="D00068_0001_01_TLC_CAKE 60_Filler_169.mov" />
+    <Fillers Duration="15" FileName="D00069_0001_01_TLC_FACES 15_Filler_169.mov" />
+    <Fillers Duration="30" FileName="D00070_0001_01_TLC_FACES 30_Filler_169.mov" />
+    <Fillers Duration="60" FileName="D00071_0001_01_TLC_FACES 60_Filler_169.mov" />
+    <Fillers Duration="15" FileName="D00072_0001_01_TLC_FASHION 15_Filler_169.mov" />
+    <Fillers Duration="30" FileName="D00073_0001_01_TLC_FASHION 30_Filler_169.mov" />
+    <Fillers Duration="60" FileName="D00074_0001_01_TLC_FASHION 60_Filler_169.mov" />
+  </XmlFillers>
+</InterstitalEvent>

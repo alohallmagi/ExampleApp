@@ -1,0 +1,12 @@
+c:\users\alo.hallmagi\documents\visual studio 2015\Projects\CNSWETest\CNSWETest\bin\x86\Debug\CNSWETest.exe.config
+c:\users\alo.hallmagi\documents\visual studio 2015\Projects\CNSWETest\CNSWETest\bin\x86\Debug\CNSWETest.exe
+c:\users\alo.hallmagi\documents\visual studio 2015\Projects\CNSWETest\CNSWETest\bin\x86\Debug\CNSWETest.pdb
+c:\users\alo.hallmagi\documents\visual studio 2015\Projects\CNSWETest\CNSWETest\obj\x86\Debug\CNSWETest.exe
+c:\users\alo.hallmagi\documents\visual studio 2015\Projects\CNSWETest\CNSWETest\obj\x86\Debug\CNSWETest.pdb
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\CNSWETest\CNSWETest\obj\x86\Debug\CNSWETest.csprojResolveAssemblyReference.cache
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\CnSWE\CNSWETest\bin\x86\Debug\CNSWETest.exe.config
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\CnSWE\CNSWETest\bin\x86\Debug\CNSWETest.exe
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\CnSWE\CNSWETest\bin\x86\Debug\CNSWETest.pdb
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\CnSWE\CNSWETest\obj\x86\Debug\CNSWETest.csprojResolveAssemblyReference.cache
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\CnSWE\CNSWETest\obj\x86\Debug\CNSWETest.exe
+C:\Users\alo.hallmagi\Documents\Visual Studio 2015\Projects\CnSWE\CNSWETest\obj\x86\Debug\CNSWETest.pdb

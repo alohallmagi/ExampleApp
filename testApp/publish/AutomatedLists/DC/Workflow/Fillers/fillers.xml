@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterstitalEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <XmlLogos />
+  <XmlFillers>
+    <Fillers Duration="10" FileName="D00075_0001_01_DISCOVERY_DCH MAGIC 10_Filler_169.mov" />
+    <Fillers Duration="15" FileName="D00076_0001_01_DISCOVERY_DCH MAGIC 15_Filler_169.mov" />
+    <Fillers Duration="20" FileName="D00077_0001_01_DISCOVERY_DCH MAGIC 20_Filler_169.mov" />
+    <Fillers Duration="30" FileName="D00078_0001_01_DISCOVERY_DCH MAGIC 30_Filler_169.mov" />
+    <Fillers Duration="60" FileName="D00079_0001_01_DISCOVERY_DCH MAGIC 60_Filler_169.mov" />
+    <Fillers Duration="10" FileName="D00080_0001_01_DISCOVERY_DCH MAN MADE 10_Filler_169.mov" />
+    <Fillers Duration="15" FileName="D00081_0001_01_DISCOVERY_DCH MAN MADE 15_Filler_169.mov" />
+    <Fillers Duration="20" FileName="D00082_0001_01_DISCOVERY_DCH MAN MADE 20_Filler_169.mov" />
+    <Fillers Duration="30" FileName="D00083_0001_01_DISCOVERY_DCH MAN MADE 30_Filler_169.mov" />
+    <Fillers Duration="60" FileName="D00084_0001_01_DISCOVERY_DCH MAN MADE 60_Filler_169.mov" />
+    <Fillers Duration="10" FileName="D00085_0001_01_DISCOVERY_DCH SURVIVAL 10_Filler_169.mov" />
+    <Fillers Duration="15" FileName="D00086_0001_01_DISCOVERY_DCH SURVIVAL 15_Filler_169.mov" />
+    <Fillers Duration="20" FileName="D00087_0001_01_DISCOVERY_DCH SURVIVAL 20_Filler_169.mov" />
+    <Fillers Duration="30" FileName="D00088_0001_01_DISCOVERY_DCH SURVIVAL 30_Filler_169.mov" />
+    <Fillers Duration="60" FileName="D00089_0001_01_DISCOVERY_DCH SURVIVAL 60_Filler_169.mov" />
+    <Fillers Duration="10" FileName="D00090_0001_01_DISCOVERY_DCH TRASH TO CASH 10_Filler_169.mov" />
+    <Fillers Duration="15" FileName="D00091_0001_01_DISCOVERY_DCH TRASH TO CASH 15_Filler_169.mov" />
+    <Fillers Duration="20" FileName="D00092_0001_01_DISCOVERY_DCH TRASH TO CASH 20_Filler_169.mov" />
+    <Fillers Duration="30" FileName="D00093_0001_01_DISCOVERY_DCH TRASH TO CASH 30_Filler_169.mov" />
+    <Fillers Duration="60" FileName="D00094_0001_01_DISCOVERY_DCH TRASH TO CASH 60_Filler_169.mov" />
+    <Fillers Duration="10" FileName="D00095_0001_01_DISCOVERY_DCH TURBO 10_Filler_169.mov" />
+    <Fillers Duration="15" FileName="D00096_0001_01_DISCOVERY_DCH TURBO 15_Filler_169.mov" />
+    <Fillers Duration="20" FileName="D00097_0001_01_DISCOVERY_DCH TURBO 20_Filler_169.mov" />
+    <Fillers Duration="30" FileName="D00098_0001_01_DISCOVERY_DCH TURBO 30_Filler_169.mov" />
+    <Fillers Duration="60" FileName="D00099_0001_01_DISCOVERY_DCH TURBO 60_Filler_169.mov" />
+  </XmlFillers>
+</InterstitalEvent>

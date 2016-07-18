@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterstitalEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <XmlLogos />
+  <XmlFillers>
+    <Fillers Duration="53" FileName="##_PR_PCN4685#01_01.mxf" />
+    <Fillers Duration="51" FileName="##_PR_PCN4685#02_01.mxf" />
+    <Fillers Duration="45" FileName="##_PR_PCN4685#03_01.mxf" />
+    <Fillers Duration="79" FileName="##_PR_PCN4685#04_01.mxf" />
+    <Fillers Duration="51" FileName="##_PR_PCN4685#05_01.mxf" />
+    <Fillers Duration="36" FileName="##_PR_PCN4685#06_01.mxf" />
+    <Fillers Duration="56" FileName="##_PR_PCN4685#07_01.mxf" />
+    <Fillers Duration="28" FileName="##_PR_PCN4685#08_01.mxf" />
+    <Fillers Duration="68" FileName="##_PR_PCN4685#09_01.mxf" />
+    <Fillers Duration="46" FileName="##_PR_PCN4685#10_01.mxf" />
+    <Fillers Duration="71" FileName="##_PR_PCN4685#11_01.mxf" />
+    <Fillers Duration="39" FileName="##_PR_PCN4685#12_01.mxf" />
+    <Fillers Duration="46" FileName="##_PR_PCN4721#01_01.mxf" />
+    <Fillers Duration="60" FileName="##_PR_PCN4721#02_01.mxf" />
+    <Fillers Duration="43" FileName="##_PR_PCN4721#03_01.mxf" />
+    <Fillers Duration="64" FileName="##_PR_PCN4721#04_01.mxf" />
+    <Fillers Duration="28" FileName="##_PR_PCN4721#05_01.mxf" />
+    <Fillers Duration="30" FileName="##_PR_PCN4834#01_01.mxf" />
+    <Fillers Duration="65" FileName="##_PR_PCN4835#01_01.mxf" />
+    <Fillers Duration="70" FileName="##_PR_PCN4835#02_01.mxf" />
+    <Fillers Duration="75" FileName="##_PR_PCN4835#03_01.mxf" />
+    <Fillers Duration="30" FileName="##_PR_PCN4939#01_01.mxf" />
+  </XmlFillers>
+</InterstitalEvent>

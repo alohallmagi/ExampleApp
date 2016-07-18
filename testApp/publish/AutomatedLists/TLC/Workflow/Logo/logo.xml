@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterstitalEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <XmlLogos>
+    <Logos Duration="5" FileName="D00031_0001_01_TLC_SlideShot_Bump_Blue_5s_Bumper_169.mov" />
+    <Logos Duration="8" FileName="D00032_0001_01_TLC_SlideShot_Bump_Blue_8s_Bumper_169.mov" />
+    <Logos Duration="5" FileName="D00033_0001_01_TLC_SlideShot_Bump_Green_5s_Bumper_169.mov" />
+    <Logos Duration="8" FileName="D00034_0001_01_TLC_SlideShot_Bump_Green_8s_Bumper_169.mov" />
+    <Logos Duration="5" FileName="D00035_0001_01_TLC_SlideShot_Bump_Mag_5s_Bumper_169.mov" />
+    <Logos Duration="8" FileName="D00036_0001_01_TLC_SlideShot_Bump_Mag_8s_Bumper_169.mov" />
+    <Logos Duration="5" FileName="D00037_0001_01_TLC_SlideShot_Bump_Yel_5s_Bumper_169.mov" />
+    <Logos Duration="8" FileName="D00038_0001_01_TLC_SlideShot_Bump_Yel_8s_Bumper_169.mov" />
+    <Logos Duration="4" FileName="D00039_0001_01_TLC_SpinShot_Bump_Blue_4s_Bumper_169.mov" />
+    <Logos Duration="7" FileName="D00040_0001_01_TLC_SpinShot_Bump_Blue_7s_Bumper_169.mov" />
+    <Logos Duration="10" FileName="D00041_0001_01_TLC_SpinShot_Bump_Blue_10s_Bumper_169.mov" />
+    <Logos Duration="4" FileName="D00042_0001_01_TLC_SpinShot_Bump_Green_4s_Bumper_169.mov" />
+    <Logos Duration="7" FileName="D00043_0001_01_TLC_SpinShot_Bump_Green_7s_Bumper_169.mov" />
+    <Logos Duration="10" FileName="D00044_0001_01_TLC_SpinShot_Bump_Green_10s_Bumper_169.mov" />
+    <Logos Duration="4" FileName="D00045_0001_01_TLC_SpinShot_Bump_Mag_4s_Bumper_169.mov" />
+    <Logos Duration="7" FileName="D00046_0001_01_TLC_SpinShot_Bump_Mag_7s_Bumper_169.mov" />
+    <Logos Duration="10" FileName="D00047_0001_01_TLC_SpinShot_Bump_Mag_10s_Bumper_169.mov" />
+    <Logos Duration="4" FileName="D00048_0001_01_TLC_SpinShot_Bump_Yel_4s_Bumper_169.mov" />
+    <Logos Duration="7" FileName="D00049_0001_01_TLC_SpinShot_Bump_Yel_7s_Bumper_169.mov" />
+    <Logos Duration="10" FileName="D00050_0001_01_TLC_SpinShot_Bump_Yel_10s_Bumper_169.mov" />
+    <Logos Duration="3" FileName="D00052_0001_01_TLC_TopShot_Bump_Blue_3s_Bumper_169.mov" />
+    <Logos Duration="6" FileName="D00053_0001_01_TLC_TopShot_Bump_Blue_6s_Bumper_169.mov" />
+    <Logos Duration="9" FileName="D00054_0001_01_TLC_TopShot_Bump_Blue_9s_Bumper_169.mov" />
+    <Logos Duration="3" FileName="D00055_0001_01_TLC_TopShot_Bump_Green_3s_Bumper_169.mov" />
+    <Logos Duration="6" FileName="D00056_0001_01_TLC_TopShot_Bump_Green_6s_Bumper_169.mov" />
+    <Logos Duration="9" FileName="D00057_0001_01_TLC_TopShot_Bump_Green_9s_Bumper_169.mov" />
+    <Logos Duration="3" FileName="D00058_0001_01_TLC_TopShot_Bump_Mag_3s_Bumper_169.mov" />
+    <Logos Duration="6" FileName="D00059_0001_01_TLC_TopShot_Bump_Mag_6s_Bumper_169.mov" />
+    <Logos Duration="9" FileName="D00060_0001_01_TLC_TopShot_Bump_Mag_9s_Bumper_169.mov" />
+    <Logos Duration="3" FileName="D00061_0001_01_TLC_TopShot_Bump_Yel_3s_Bumper_169.mov" />
+    <Logos Duration="6" FileName="D00062_0001_01_TLC_TopShot_Bump_Yel_6s_Bumper_169.mov" />
+    <Logos Duration="9" FileName="D00051_0001_01_TLC_TopShot_Bump_Yel_9s_Bumper_169.mov" />
+  </XmlLogos>
+  <XmlFillers />
+</InterstitalEvent>

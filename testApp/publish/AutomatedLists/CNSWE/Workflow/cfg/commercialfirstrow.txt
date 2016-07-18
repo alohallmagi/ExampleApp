@@ -1,0 +1,10 @@
+Spot Sales Area Code
+null
+Scheduled Date
+Scheduled Time
+Seq. In Break
+Industry Code
+House Number
+Product
+Length
+Programme/Category

@@ -1,0 +1,101 @@
+﻿<Window x:Class="CNSWE.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CNSWE"
+        mc:Ignorable="d"
+        Title="CN SWE" SizeToContent="WidthAndHeight" MinHeight="200" Height="315" Width="500" AllowDrop="True" ScrollViewer.CanContentScroll="True" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style x:Key="buttonStyle" TargetType="Button">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="1"/>
+        </Style>
+        <Style x:Key="datagridStyle" TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="True"/>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="5,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="27"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="225"/>
+            <ColumnDefinition Width="125"/>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Menu Name="TopMenu"  IsMainMenu="True" HorizontalAlignment="Left" MinWidth="70" Margin="2">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New...">
+                    <MenuItem Header="_CNSWE" Command="{Binding Path=OpenCNSWECommand}" Name="CnSwe"/>
+                    <MenuItem Header="_TLC" Command="{Binding Path=OpenTLCCommand}" Name="TLC"/>
+                    <MenuItem Header="_DC" Command="{Binding Path=OpenDCCommand}" Name="DC"/>
+                </MenuItem>               
+                <Separator />
+                <MenuItem Header="_Options" Command="{Binding Path=OpenOptionsCommand}"/>
+                <MenuItem Header="_Exit" Name="exitProgram"/>
+            </MenuItem>
+            <MenuItem Header="_About">
+                <MenuItem Header="_Info" Command="{Binding Path=VersionInfoCommand}" Name="VersionInfo" />
+            </MenuItem>
+        </Menu>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Margin="1" Orientation="Horizontal">
+            <Label x:Name="lbl_commercialFile" Content="Open Commercials" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Label x:Name="lbl_scheduleFile" Content="Open Dayschedule" Margin="1,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Label x:Name="lbl_addLogo" Content="Interstitals" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="7,0,0,0"/>
+            <Label x:Name="lbl_generate" Content="Generate List" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,0,0,0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Margin="1" Orientation="Horizontal">
+            <Button x:Name="btn_commercialFile" Command="{Binding Path=OpenCommercialsCommand}" Content="Open" Width="110" Style="{StaticResource buttonStyle}">
+            </Button>
+            <Button x:Name="btn_scheduleFile" Command="{Binding Path=OpenScheduleCommand}" Content="Open" Width="110" Style="{StaticResource buttonStyle}"/>
+            <Button x:Name="btn_Interstitals" Content="Interstitals" Command="{Binding Path=OpenInterstitalsCommand}" Margin="10,0,0,0"/>
+            <Button x:Name="btn_generate" Command="{Binding Path=GenerateCommand}" Margin="10,0,0,0" Content="Generate" Width="85" Style="{StaticResource buttonStyle}"/>
+            <Button x:Name="btn_date" Command="{Binding Path=DateCommand}" Margin="10,0,0,0" Content="Date" Width="70" Style="{StaticResource buttonStyle}" Visibility="Collapsed"/>
+            <Popup Name="CalendarPopup" IsOpen="False">
+                <StackPanel Background="White">
+                    <TextBox>Pick date:</TextBox>
+                    <DatePicker Name="listDate" SelectedDate="{Binding Path=ListDate}"/>
+                    <Button Height="15"  Command="{Binding Path=DatePickerCommand}" FontSize="8" Margin="0,1,0,0">Save date</Button>
+                </StackPanel>
+            </Popup>
+        </StackPanel>
+        <StackPanel Name="lbStackPanel" Grid.Row="5" Grid.RowSpan="1" Grid.ColumnSpan="3" Margin="1" Height="Auto" Width="Auto" MinWidth="315" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <ListBox x:Name="lb_openedFiles" Background="AntiqueWhite" Height="160" BorderBrush="Black"/>
+        </StackPanel>
+        <StackPanel Name="cbInterstitals" Grid.Row="4" Grid.ColumnSpan="3" Margin="1" Orientation="Horizontal" Visibility="Collapsed">
+            <Label x:Name="lbl_cnSweCB" Content="CN SWE:" FontSize="10" />
+            <CheckBox x:Name="cb_cnSwe" Command="{Binding Path=CnSWEInterstitalCommand}" Margin="0,5,0,0" />
+            <Label x:Name="lbl_tlcCB"  Content="TLC:"  FontSize="10" />
+            <CheckBox x:Name="cb_tlc" Command="{Binding Path=TLCInterstitalCommand}" Margin="0,5,0,0"/>
+            <Label x:Name="lbl_dcCB" Content="DC:"  FontSize="10" />
+            <CheckBox x:Name="cb_dc" Command="{Binding Path=DCInterstitalCommand}" Margin="0,5,0,0"/>
+        </StackPanel>
+        <StackPanel Name="dgvStackPanel" Grid.Row="6" Grid.RowSpan="1" Grid.ColumnSpan="3" Margin="1" Visibility="Collapsed">
+            <DataGrid x:Name="dgv_openedFiles" Background="AntiqueWhite" Style="{StaticResource datagridStyle}" Height="160" BorderBrush="Black" Margin="0,10,0,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="FileName" Width="350" Binding="{Binding FileName}"/>
+                    <DataGridTextColumn Header="Duration" Width="130" Binding="{Binding Duration}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <StackPanel Name="dgvButtons" Grid.Row="7" Grid.ColumnSpan="3" Margin="1" Visibility="Collapsed">
+            <Button x:Name="btn_Logos" Content="Logos" Command="{Binding Path=OpenLogosCommand}" Width="210" Margin="0,0,264,0"/>
+            <Button x:Name="btn_Fillers" Content="Fillers" Command="{Binding Path=OpenFillersCommand}" Width="210" Margin="264,-22,0,0"/>
+            <Button x:Name="btn_Save" Content="Save" Command="{Binding Path=SaveInterstitalsCommand}" Margin="2"/>
+        </StackPanel>
+    </Grid>
+</Window>

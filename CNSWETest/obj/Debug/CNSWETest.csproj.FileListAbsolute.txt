@@ -1,0 +1,6 @@
+c:\users\alo.hallmagi\documents\visual studio 2015\Projects\CNSWETest\CNSWETest\bin\Debug\CNSWETest.exe.config
+c:\users\alo.hallmagi\documents\visual studio 2015\Projects\CNSWETest\CNSWETest\bin\Debug\CNSWETest.exe
+c:\users\alo.hallmagi\documents\visual studio 2015\Projects\CNSWETest\CNSWETest\bin\Debug\CNSWETest.pdb
+c:\users\alo.hallmagi\documents\visual studio 2015\Projects\CNSWETest\CNSWETest\obj\Debug\CNSWETest.csprojResolveAssemblyReference.cache
+c:\users\alo.hallmagi\documents\visual studio 2015\Projects\CNSWETest\CNSWETest\obj\Debug\CNSWETest.exe
+c:\users\alo.hallmagi\documents\visual studio 2015\Projects\CNSWETest\CNSWETest\obj\Debug\CNSWETest.pdb
