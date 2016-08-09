@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="verInfo" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1.5.1</Value>
+      <Value Profile="(Default)">1.6 - Added TNT</Value>
     </Setting>
     <Setting Name="tlcScheduleStartRow" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -82,6 +82,21 @@
     </Setting>
     <Setting Name="dcIDAudioExtension" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="tntSchedulePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="TNTComStartRow" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="sonyRusAudioExt" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="sonyEstAudioExt" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="sonyUseRusAudio" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

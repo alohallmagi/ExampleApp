@@ -9,7 +9,7 @@ using testApp.Models;
 
 namespace testApp
 {
-   public class TLCDCRusAudios
+   public class AppRusAudios
     {
         private List<RussianAudios> audios = new List<RussianAudios>();
         public List<RussianAudios> GetList()
@@ -19,13 +19,13 @@ namespace testApp
 
         public void ReadAudios()
         {
-            XmlSerializer reader = new XmlSerializer(typeof(TLCDCAudios));
+            XmlSerializer reader = new XmlSerializer(typeof(AppAudios));
 
             StreamReader file = new StreamReader(Utility.TLCDCRusAudioPath); ;
             try
             {
 
-                TLCDCAudios overview = (TLCDCAudios)reader.Deserialize(file);
+                AppAudios overview = (AppAudios)reader.Deserialize(file);
                 foreach (RusAudios item in overview.russianAudios)
                 {
                     audios.Add(new RussianAudios(item.FileName));

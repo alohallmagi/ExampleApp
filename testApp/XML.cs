@@ -13,6 +13,7 @@ namespace testApp
 {
     public class XML
     {
+        private List<Messages> messages = new List<Messages>();
         private bool useRusAudios;
         public static int breakDuration;
         private int CommercialIndex = 0;
@@ -22,7 +23,9 @@ namespace testApp
         private string TimeHelper;
         private int CommercialDuration;
         private int CommercialCountHelper;
+        private int TNTCounter;
         private int FillerDuration;
+        List<Commercials> commercials = new List<Commercials>();
         List<Commercials> firstBreak = new List<Commercials>();
         List<Commercials> secondBreak = new List<Commercials>();
         List<Commercials> thirdBreak = new List<Commercials>();
@@ -41,6 +44,8 @@ namespace testApp
         Logo logo = new Logo();
 
         MainWindow _MW;
+
+        public XML() { }
 
         public void GenerateCNSWEXML(MainWindow MW)
         {
@@ -391,7 +396,7 @@ namespace testApp
 
                         if (scheduleEvents.getFirstBreakTime().Contains(commercialEvents.getStartTime()))
                         {
-                            firstBreak.Add(new Commercials(commercialEvents.getStartTime(), commercialEvents.getFileName(), commercialEvents.getFileTitle(), commercialEvents.getProgramTitle(), commercialEvents.getDuration(),commercialEvents.getRusAudio(),commercialEvents.getEstAudio()));
+                            firstBreak.Add(new Commercials(commercialEvents.getStartTime(), commercialEvents.getFileName(), commercialEvents.getFileTitle(), commercialEvents.getProgramTitle(), commercialEvents.getDuration(), commercialEvents.getRusAudio(), commercialEvents.getEstAudio()));
                             CommercialIndex++;
                         }
                         if (scheduleEvents.getSecondBreakTime().Contains(commercialEvents.getStartTime()))
@@ -676,7 +681,7 @@ namespace testApp
 
                         if (scheduleEvents.getFirstBreakTime().Contains(commercialEvents.getStartTime()))
                         {
-                            firstBreak.Add(new Commercials(commercialEvents.getStartTime(),commercialEvents.getFileName(),commercialEvents.getDuration(),commercialEvents.getFileTitle()));
+                            firstBreak.Add(new Commercials(commercialEvents.getStartTime(), commercialEvents.getFileName(), commercialEvents.getDuration(), commercialEvents.getFileTitle()));
                             CommercialIndex++;
                         }
                         if (scheduleEvents.getSecondBreakTime().Contains(commercialEvents.getStartTime()))
@@ -773,6 +778,76 @@ namespace testApp
                 Utility.IsListValidated = Validate.validateXML(_MW, Utility.xmlfile);
 
             }
+        }
+
+        public List<Messages> GenerateTNTCommercials()
+        {
+            messages.Add(new Messages(readCommercials.CommercialExcel(Utility.TNTCommercialPath,Properties.Settings.Default.TNTComStartRow)));
+
+            commercials = readCommercials.GetCommercial();
+
+            #region Oasys Commands
+            var schedule = new Schedule();
+            ProgramGroup rGroup = new ProgramGroup();
+            //TODO TNT title (date, language)
+            rGroup.Title = "";
+            #endregion
+            while (TNTCounter < commercials.Count - 1)
+            {
+                ProgramGroup cGroup = new ProgramGroup();
+
+                for (int i = CommercialCountHelper; i <= commercials.Count - 1; i++)
+                {
+                    VideoProgramEvent vEvent = new VideoProgramEvent();
+                    AudioSubstream cAudio = new AudioSubstream();
+                    AudioSubstreamEvent caEvent = new AudioSubstreamEvent();
+
+                    vEvent.FileName = commercials[i].getFileName();
+                    vEvent.IsCommercial = true;
+
+                    caEvent.FileName = commercials[i].getFileName();
+
+                    cAudio.Name = AudioSubstreamName.Track1;
+                    cAudio.AudioChannel = AudioSubstreamAudioChannel.RecordableAudioChannel1;
+                    cAudio.Default = true;
+                    cAudio.Event.Add(caEvent);
+
+                    vEvent.Substreams.Add(cAudio);
+
+                    cGroup.Title = commercials[i].getStartTime();
+                    cGroup.Items.Add(vEvent);
+                    if (i + 1 < commercials.Count)
+                    {
+                        try
+                        {
+                            if (commercials[i].getStartTime() != commercials[i + 1].getStartTime())
+                            {
+                                CommercialCountHelper = i + 1;
+                                rGroup.Items.Add(cGroup);
+                                break;
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }                       
+                    }
+                    TNTCounter = i;
+                }
+
+                if (TNTCounter == commercials.Count-1)
+                {
+                    rGroup.Items.Add(cGroup);
+                }
+            }
+           
+            schedule.Group = rGroup;
+
+            Validate validate = new Validate();
+
+            messages.Add(new Messages(SerializeXML(schedule)));
+            messages.Add(new Messages(validate.validateTNTXML(Utility.xmlfile)));
+
+            return messages;
         }
 
         private void CNSWEPromotions(string breakduration, int commercialdurations, int logoLength)
@@ -1225,8 +1300,8 @@ namespace testApp
             int specificwordstartIndex = 0;
             int specificwordLength = 0;
 
-                specificwordstartIndex = Properties.Settings.Default.dcConditionStartIndex;
-                specificwordLength = Properties.Settings.Default.dcConditionLength;
+            specificwordstartIndex = Properties.Settings.Default.dcConditionStartIndex;
+            specificwordLength = Properties.Settings.Default.dcConditionLength;
 
             string trimmedFileName;
             int identlength = 0;
@@ -1484,7 +1559,7 @@ namespace testApp
                             }
 
                         }
-                        if (length==0)
+                        if (length == 0)
                         {
                             length = PromosInBreak[PromosInBreak.Count - 1].getDuration();
                             PromosInBreak.RemoveAt(PromosInBreak.Count - 1);
@@ -1581,7 +1656,7 @@ namespace testApp
             return false;
         }
         private void createGroupEvent(ProgramGroup rGroup, string liveName, string brkStartTime, string brkDuration, List<Commercials> brk)
-        {            
+        {
             if (brk.Count != 0)
             {
                 foreach (Commercials commercial in brk)
@@ -1687,7 +1762,7 @@ namespace testApp
                 brk.Clear();
                 breakDuration = 0;
             }
-          
+
         }
         private void FillGroup(ProgramGroup rGroup, string breakduration, int commercialsdurations, List<Commercials> brk)
         {
@@ -1803,11 +1878,11 @@ namespace testApp
             cGroup.Title = cGroupTitle;
             rGroup.Items.Add(cGroup);
         }
-        private void FillDCIDGroup(ProgramGroup rGroup,string breakduration, int commercialsdurations, List<Commercials> brk)
+        private void FillDCIDGroup(ProgramGroup rGroup, string breakduration, int commercialsdurations, List<Commercials> brk)
         {
             ProgramGroup cGroup = new ProgramGroup();
             string cGroupTitle = "";
-            
+
             DCIDPromotions(breakduration, commercialsdurations);
             Idents();
             for (int i = 0; i < IdentsInBreak.Count; i++)
@@ -1832,7 +1907,7 @@ namespace testApp
                 if (Properties.Settings.Default.dcIDUseAudioExtension)
                 {
                     string extension = Properties.Settings.Default.dcIDAudioExtension;
-                    caEvent.FileName = commercial.getFileName()+extension;
+                    caEvent.FileName = commercial.getFileName() + extension;
 
                 }
                 else
@@ -1867,7 +1942,7 @@ namespace testApp
                 AudioSubstream cAudio4 = new AudioSubstream();
                 AudioSubstreamEvent caEvent = new AudioSubstreamEvent();
 
-                vEvent.FileName = promos.getFileName();               
+                vEvent.FileName = promos.getFileName();
                 caEvent.FileName = promos.getFileName();
 
                 cAudio.Name = AudioSubstreamName.Track1;
@@ -1945,6 +2020,26 @@ namespace testApp
             iAudio2.Event.Add(iaEvent);
             ivEvent.Substreams.Add(iAudio2);
             cGroup.Items.Add(ivEvent);
+        }
+
+        private string SerializeXML(Schedule schedule)
+        {
+            string message="";
+            var serializer = new XmlSerializer(typeof(Schedule), "TEST");
+            try
+            {
+                using (TextWriter writer = new StreamWriter(Utility.xmlfile))
+                {
+                    serializer.Serialize(writer, schedule);
+                    System.Console.Write(writer.ToString());
+                }
+                message = "XML Created";
+            }
+            catch (Exception ex)
+            {
+                message = "XML creation failed " + ex.Message;
+            }
+            return message;
         }
     }
 }

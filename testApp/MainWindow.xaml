@@ -41,6 +41,11 @@
                     <MenuItem Header="_TLC" Command="{Binding Path=OpenTLCCommand}" Name="TLC"/>
                     <MenuItem Header="_DC" Command="{Binding Path=OpenDCCommand}" Name="DC"/>
                     <MenuItem Header="_DC ID" Command="{Binding Path=OpenDCIDCommand}" Name="DCID"/>
+                    <MenuItem Header="_TNT" Command="{Binding Path=OpenTNTCommand}" Name="TNT"/>
+                    <MenuItem Header="_SONY" Command="{Binding Path=OpenSONYCommand}" Name="SONY">
+                        <MenuItem Header="_LVA" Command="{Binding Path=OpenSONYLVACommand}" Name="SONYLVA"/>
+                        <MenuItem Header="_EST" Command="{Binding Path=OpenSONYESTCommand}" Name="SONYEST"/>
+                    </MenuItem>
                 </MenuItem>
                 <Separator />
                 <MenuItem Header="_Options" Command="{Binding Path=OpenOptionsCommand}"/>

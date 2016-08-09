@@ -22,7 +22,7 @@ namespace testApp
         public OptionsView()
         {
             InitializeComponent();
-            DataContext = new CNViewModel(this);
+            DataContext = new AppViewModel(this);
 
         }
     }

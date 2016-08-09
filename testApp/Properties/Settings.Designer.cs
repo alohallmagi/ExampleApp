@@ -25,7 +25,7 @@ namespace testApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.5.1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.6 - Added TNT")]
         public string verInfo {
             get {
                 return ((string)(this["verInfo"]));
@@ -344,6 +344,66 @@ namespace testApp.Properties {
             }
             set {
                 this["dcIDAudioExtension"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string tntSchedulePath {
+            get {
+                return ((string)(this["tntSchedulePath"]));
+            }
+            set {
+                this["tntSchedulePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TNTComStartRow {
+            get {
+                return ((int)(this["TNTComStartRow"]));
+            }
+            set {
+                this["TNTComStartRow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sonyRusAudioExt {
+            get {
+                return ((string)(this["sonyRusAudioExt"]));
+            }
+            set {
+                this["sonyRusAudioExt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sonyEstAudioExt {
+            get {
+                return ((string)(this["sonyEstAudioExt"]));
+            }
+            set {
+                this["sonyEstAudioExt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool sonyUseRusAudio {
+            get {
+                return ((bool)(this["sonyUseRusAudio"]));
+            }
+            set {
+                this["sonyUseRusAudio"] = value;
             }
         }
     }

@@ -44,6 +44,7 @@ namespace testApp
         private static string timeFormat = "HH:mm:ss:ff";
         public static string CommercialFilePath;
         public static string ScheduleFilePath;
+        public static string SonyRusAudioPath = @"C:\\AutomatedLists\Utility\Sony\rusaudios.xml";
         public static string TLCDCRusAudioPath = @"C:\\AutomatedLists\Utility\TLCDC\rusaudios.xml";
         public static string TLCFilePath = @"C:\\AutomatedLists\TLC\Workflow\";
         public static string DCFilePath = @"C:\\AutomatedLists\DC\Workflow\";
@@ -51,7 +52,12 @@ namespace testApp
         public static string CNSWEFilePath = @"C:\\AutomatedLists\CNSWE\Workflow\";
         public static string CNSWEScheduledfile = @"C:\\AutomatedLists\CNSWE\Workflow\Schedule\test.txt";
         public static string DCIDCommercialPath = @"C:\\AutomatedLists\DCID\Workflow\Commercial\";
+        public static string TNTFilePath = @"C:\\AutomatedLists\TNT\Workflow\";
+        public static string TNTCommercialPath = @"C:\AutomatedLists\TNT\Workflow\cfg\commercialfirstrow.txt";
         MainWindow _MW;
+
+        public Utility() { }
+
         public void CheckForSchedule(string FolderName, MainWindow _MW)
         {
             ScheduleFilePath = "";
@@ -154,9 +160,9 @@ namespace testApp
             }
 
         }
-        public static void saveTLCDCRusAudiosToXML(string fileName, TLCDCAudios audios)
+        public static void saveRusAudiosToXML(string fileName, AppAudios audios)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(TLCDCAudios), "TLCDC");
+            XmlSerializer serializer = new XmlSerializer(typeof(AppAudios), "TLCDC");
             using (TextWriter writer = new StreamWriter(fileName))
             {
                 serializer.Serialize(writer, audios);
@@ -189,17 +195,17 @@ namespace testApp
                 return null;
             }
         }
-        public static TLCDCAudios readRusAudiosXML(string fileLocation)
+        public static AppAudios readRusAudiosXML(string fileLocation)
         {
             if (!String.IsNullOrEmpty(fileLocation))
             {
 
-                XmlSerializer reader = new XmlSerializer(typeof(TLCDCAudios));
+                XmlSerializer reader = new XmlSerializer(typeof(AppAudios));
                 StreamReader XMLfile = new StreamReader(fileLocation);
-                TLCDCAudios overview;
+                AppAudios overview;
                 try
                 {
-                    overview = (TLCDCAudios)reader.Deserialize(XMLfile);
+                    overview = (AppAudios)reader.Deserialize(XMLfile);
                     return overview;
                 }
                 catch
@@ -391,6 +397,10 @@ namespace testApp
                     string initError = String.Format("Saving XML error: " + ex.ToString());//TODO: add column
                     populateLB(_MW, initError);
                 }
+            }
+            else
+            {
+                populateLB(_MW, "Validation failed!");
             }
         }
         public void clearFolder(MainWindow MW, string FolderName)

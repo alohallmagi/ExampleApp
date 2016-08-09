@@ -28,6 +28,9 @@ namespace testApp
         private bool DBConnection = false;
         private OleDbConnection conn = new OleDbConnection();
         MainWindow _MW;
+
+        public ReadText() { }
+
         private void CreateDBConnection()
         {
             try
@@ -209,7 +212,7 @@ namespace testApp
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 DBConnection = false;
                 CloseDBConnection();

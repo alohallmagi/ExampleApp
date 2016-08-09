@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <configSections>
+        <sectionGroup name="userSettings" type="System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" >
+            <section name="testApp.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" allowExeDefinition="MachineToLocalUser" requirePermission="false" />
+        </sectionGroup>
+    </configSections>
+    <startup> 
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5.2" />
+    </startup>
+    <userSettings>
+        <testApp.Properties.Settings>
+            <setting name="verInfo" serializeAs="String">
+                <value>1.6 - Added TNT</value>
+            </setting>
+            <setting name="tlcScheduleStartRow" serializeAs="String">
+                <value>0</value>
+            </setting>
+            <setting name="cnsweComStartRow" serializeAs="String">
+                <value>0</value>
+            </setting>
+            <setting name="cnsweStartTime" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="dcComStartRow" serializeAs="String">
+                <value>0</value>
+            </setting>
+            <setting name="dcScheduleStartRow" serializeAs="String">
+                <value>0</value>
+            </setting>
+            <setting name="dcSchedulePath" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="defaultOpenLocation" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="defaultSaveLocation" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="tlcComStartRow" serializeAs="String">
+                <value>0</value>
+            </setting>
+            <setting name="tlcSchedulePath" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="dcConditionStartIndex" serializeAs="String">
+                <value>0</value>
+            </setting>
+            <setting name="dcConditionLength" serializeAs="String">
+                <value>0</value>
+            </setting>
+            <setting name="tlcConditionStartIndex" serializeAs="String">
+                <value>0</value>
+            </setting>
+            <setting name="tlcConditionLength" serializeAs="String">
+                <value>0</value>
+            </setting>
+            <setting name="transistionType" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="transistionDuration" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="useTransistion" serializeAs="String">
+                <value>False</value>
+            </setting>
+            <setting name="dcIDSchedulePath" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="tlcdcRusAudioExtension" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="tlcdcEstAudioExtension" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="tlcdcUseRusAudios" serializeAs="String">
+                <value>False</value>
+            </setting>
+            <setting name="dcidFindWord" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="dcidReplaceWord" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="useFindReplace" serializeAs="String">
+                <value>False</value>
+            </setting>
+            <setting name="dcIDUseAudioExtension" serializeAs="String">
+                <value>False</value>
+            </setting>
+            <setting name="dcIDAudioExtension" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="tntSchedulePath" serializeAs="String">
+                <value />
+            </setting>
+        </testApp.Properties.Settings>
+    </userSettings>
+</configuration>

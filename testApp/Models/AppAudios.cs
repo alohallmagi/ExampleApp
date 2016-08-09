@@ -13,15 +13,15 @@ namespace testApp.Models
     [System.Diagnostics.DebuggerStepThrough()]
     [DesignerCategory("code")]
     [XmlRoot(Namespace = "")]
-    public partial class TLCDCAudios
+    public partial class AppAudios
     {
         private ObservableCollection<RusAudios> rusAudios;
         private Utility utility = new Utility();
-        public TLCDCAudios()
+        public AppAudios()
         {
             this.rusAudios = new ObservableCollection<RusAudios>();
         }
-        [XmlArrayItem("RusAudios")]
+        [XmlArrayItem("AppAudios")]
         public ObservableCollection<RusAudios> russianAudios
         {
             get

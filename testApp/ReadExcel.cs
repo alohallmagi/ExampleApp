@@ -46,14 +46,19 @@ namespace testApp
         private string fileTitle;
         private string programTitle;
         private int duration;
-        private string[] firstCNSWERow;
+        private string[] firstRow;
+        private string[] firstCNSWERow, firstTNTRow, TurnerRow;
         private string[] firstTLCComRow;
         private string[] firstDCComRow;
         private string[] firstTLCScheduleRow;
         private string[] firstDCScheduleRow;
         private MainWindow _MW;
+
+        public ReadExcel() { }
+
         Utility utility = new Utility();
         Excel.Range ScheduleRange;
+
         public List<Commercials> GetCommercial()
         {
             return commercials;
@@ -88,7 +93,7 @@ namespace testApp
             }
 
             commercialamount = 0;
-            readFirstRow(firstCNSWERow, Properties.Settings.Default.cnsweComStartRow);
+            validateFirstRow(firstCNSWERow, Properties.Settings.Default.cnsweComStartRow);
             try
             {
                 if (String.IsNullOrEmpty(Utility.initError))
@@ -103,8 +108,7 @@ namespace testApp
                         {
                             commercialamount++;
                             errorcolumn = 4;
-                            dhelper = (double)(ScheduleRange.Cells[i, errorcolumn] as Excel.Range).Value2;
-                            startTime = utility.DoubleToTime(dhelper);
+                            startTime = StartTime(i);
                             errorcolumn = 6;
                             fileTitle = (string)(ScheduleRange.Cells[i, errorcolumn] as Excel.Range).Value2;
                             errorcolumn = 7;
@@ -136,7 +140,7 @@ namespace testApp
         }
         public void OpenTLCCommercialExcelFile(MainWindow MW)
         {
-            TLCDCRusAudios tlcdcRusAudios = new TLCDCRusAudios();
+            AppRusAudios tlcdcRusAudios = new AppRusAudios();
             tlcdcRusAudios.ReadAudios();
             List<RussianAudios> rusAudios = tlcdcRusAudios.GetList();
 
@@ -151,7 +155,7 @@ namespace testApp
             }
             OpenExcelApp(_MW, Utility.CommercialFilePath);
             commercialamount = 0;
-            readFirstRow(firstTLCComRow, Properties.Settings.Default.tlcComStartRow);
+            validateFirstRow(firstTLCComRow, Properties.Settings.Default.tlcComStartRow);
             try
             {
                 if (String.IsNullOrEmpty(Utility.initError))
@@ -199,7 +203,7 @@ namespace testApp
         }
         public void OpenDCCommercialExcelFile(MainWindow MW)
         {
-            TLCDCRusAudios tlcdcRusAudios = new TLCDCRusAudios();
+            AppRusAudios tlcdcRusAudios = new AppRusAudios();
             tlcdcRusAudios.ReadAudios();
             List<RussianAudios> rusAudios = tlcdcRusAudios.GetList();
             this._MW = MW;
@@ -213,7 +217,7 @@ namespace testApp
             }
             OpenExcelApp(_MW, Utility.CommercialFilePath);
             commercialamount = 0;
-            readFirstRow(firstDCComRow, Properties.Settings.Default.dcComStartRow);
+            validateFirstRow(firstDCComRow, Properties.Settings.Default.dcComStartRow);
             try
             {
                 if (String.IsNullOrEmpty(Utility.initError))
@@ -275,7 +279,7 @@ namespace testApp
             {
 
             OpenExcelApp(_MW, Utility.ScheduleFilePath);
-            readFirstRow(firstTLCScheduleRow, Properties.Settings.Default.tlcScheduleStartRow);
+            validateFirstRow(firstTLCScheduleRow, Properties.Settings.Default.tlcScheduleStartRow);
             try
             {
                 if (String.IsNullOrEmpty(Utility.initError))
@@ -471,7 +475,7 @@ namespace testApp
             if (Utility.IsScheduleFirstRowCorrect)
             {
             OpenExcelApp(_MW, Utility.ScheduleFilePath);
-            readFirstRow(firstDCScheduleRow, Properties.Settings.Default.dcScheduleStartRow);
+            validateFirstRow(firstDCScheduleRow, Properties.Settings.Default.dcScheduleStartRow);
             try
             {
                 if (String.IsNullOrEmpty(Utility.initError))
@@ -668,7 +672,7 @@ namespace testApp
             if (Utility.IsScheduleFirstRowCorrect)
             {
                 OpenExcelApp(_MW, Utility.ScheduleFilePath);
-                readFirstRow(firstDCScheduleRow, Properties.Settings.Default.dcScheduleStartRow);
+                validateFirstRow(firstDCScheduleRow, Properties.Settings.Default.dcScheduleStartRow);
                 try
                 {
                     if (String.IsNullOrEmpty(Utility.initError))
@@ -840,7 +844,104 @@ namespace testApp
                 finally { utility.CloseExcelItems(); }
 
             }
+        }        
+
+        public string TNTCommercialExcel()
+        {
+            string message="";
+            firstTNTRow= System.IO.File.ReadAllLines(@"C:\AutomatedLists\TNT\Workflow\cfg\commercialfirstrow.txt");
+            message = OpenTurnerExcel(Utility.CommercialFilePath);
+            message += validateTNTFirstRow(firstTNTRow, Properties.Settings.Default.TNTComStartRow);
+
+            try
+            {
+                if (String.IsNullOrEmpty(Utility.initError))
+                {
+                    for (int i = 4; i <= ScheduleRange.Rows.Count; i++)
+                    {
+                        errorline = i;
+                        if (!String.IsNullOrWhiteSpace((string)(ScheduleRange.Cells[i, 7] as Excel.Range).Value2))
+                        {
+                            commercialamount++;
+                            errorcolumn = 4;
+                            startTime = StartTime(i);
+                            errorcolumn = 6;
+                            fileTitle = (string)(ScheduleRange.Cells[i, errorcolumn] as Excel.Range).Value2;
+                            errorcolumn = 7;
+                            fileName = (string)(ScheduleRange.Cells[i, errorcolumn] as Excel.Range).Value2;
+                            errorcolumn = 9;
+                            duration = (int)(ScheduleRange.Cells[i, errorcolumn] as Excel.Range).Value2;
+                            errorcolumn = 10;
+                            programTitle = (string)(ScheduleRange.Cells[i, errorcolumn] as Excel.Range).Value2;
+
+                            commercials.Add(new Commercials(startTime, fileName, fileTitle, programTitle, duration));
+
+                        }
+                    }
+                    message += "\nCommercials has been readed!";
+                }
+                return message;
+            }
+            catch (Exception ex)
+             {
+                Utility.initError = String.Format("\nCommercials - Error on {0} row {1} column. ErrorCode: {2}", errorline, errorcolumn, ex.Message);
+                Utility.IsCommercialsCorrect = false;
+                message += Utility.initError;
+                return message;
+            }
+            finally { utility.CloseExcelItems();
+            }
         }
+
+        public string CommercialExcel(string path, int rowindex)
+        {
+            string message = "";
+            TurnerRow = System.IO.File.ReadAllLines(path);
+            message = OpenTurnerExcel(Utility.CommercialFilePath);
+            message += validateTNTFirstRow(TurnerRow, rowindex);
+
+            try
+            {
+                if (String.IsNullOrEmpty(Utility.initError))
+                {
+                    for (int i = rowindex+2; i <= ScheduleRange.Rows.Count; i++)
+                    {
+                        errorline = i;
+                        if (!String.IsNullOrWhiteSpace((string)(ScheduleRange.Cells[i, 7] as Excel.Range).Value2))
+                        {
+                            commercialamount++;
+                            errorcolumn = 4;
+                            startTime = StartTime(i);
+                            errorcolumn = 6;
+                            fileTitle = (string)(ScheduleRange.Cells[i, errorcolumn] as Excel.Range).Value2;
+                            errorcolumn = 7;
+                            fileName = (string)(ScheduleRange.Cells[i, errorcolumn] as Excel.Range).Value2;
+                            errorcolumn = 9;
+                            duration = (int)(ScheduleRange.Cells[i, errorcolumn] as Excel.Range).Value2;
+                            errorcolumn = 10;
+                            programTitle = (string)(ScheduleRange.Cells[i, errorcolumn] as Excel.Range).Value2;
+
+                            commercials.Add(new Commercials(startTime, fileName, fileTitle, programTitle, duration));
+
+                        }
+                    }
+                    message += "\nCommercials has been readed!";
+                }
+                return message;
+            }
+            catch (Exception ex)
+            {
+                Utility.initError = String.Format("\nCommercials - Error on {0} row {1} column. ErrorCode: {2}", errorline, errorcolumn, ex.Message);
+                Utility.IsCommercialsCorrect = false;
+                message += Utility.initError;
+                return message;
+            }
+            finally
+            {
+                utility.CloseExcelItems();
+            }
+        }
+
         private void OpenExcelApp(MainWindow MW, string path)
         {
             this._MW = MW;
@@ -858,7 +959,37 @@ namespace testApp
                 utility.populateLB(_MW, "ERROR: Failed to open " + Path.GetFileName(path));
             }
         }
-        private void readFirstRow(string[] firstRow, int startingrow)
+        private string OpenTurnerExcel(string path)
+        {
+            string message;
+            try
+            {
+                utility.OpenExcelApplication(path);
+                utility.OpenExcelRange(1);
+                ScheduleRange = Utility.ExcelRange;
+                message = "\nReading " + Path.GetFileName(path);
+
+            }
+            catch
+            {
+                utility.CloseExcelItems();
+                message = "\nError at reading " + Path.GetFileName(path);
+            }
+            return message;
+        }
+
+        private void readFirstRow(string firstrowPath)
+        {
+            try
+            {
+               firstRow = System.IO.File.ReadAllLines(firstrowPath);
+            }
+            catch
+            {
+                //TODO Error handling
+            }
+        }
+        private void validateFirstRow(string[] firstRow, int startingrow)
         {
             try
             {
@@ -888,6 +1019,33 @@ namespace testApp
             }
 
         }
+        private string validateTNTFirstRow(string[] firstRow, int startingrow)
+        {
+            string initError="";
+            try
+            {
+                for (int i = 1; i <= firstRow.Length; i++)
+                {
+                    if ((string)(ScheduleRange.Cells[startingrow, i] as Excel.Range).Value2 != null)
+                    {
+                        var cellValue = (string)(ScheduleRange.Cells[startingrow, i] as Excel.Range).Value2;
+                        if (!(cellValue.ToString()).Equals(firstRow[i - 1]))
+                        {
+                            initError = String.Format("Column {0} contains {1}, expected: {2} \r\n", i, cellValue.ToString(), firstRow[i - 1]);
+                        }
+
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                initError = "Failed getting first row: " + ex.Message;
+            }
+            return initError;
+
+        }
         private void RusAudios(List<RussianAudios> rusAudios)
         {
             if (Properties.Settings.Default.tlcdcUseRusAudios)
@@ -902,6 +1060,28 @@ namespace testApp
                         }
                     }
                 }
+            }
+        }
+
+        private string StartTime(int rownr)
+        {
+            string time;
+            try
+            {
+                dhelper = (double)(ScheduleRange.Cells[rownr, errorcolumn] as Excel.Range).Value2;
+                return time = utility.DoubleToTime(dhelper);
+            }
+            catch
+            {
+                string shelper = (string)(ScheduleRange.Cells[rownr, errorcolumn] as Excel.Range).Value2;
+                int ihelper = int.Parse(shelper.Substring(0, 2));
+                if (ihelper > 23)
+                {
+                    ihelper = ihelper - 24;
+                    shelper = "0" + ihelper + shelper.Substring(2) + ":00";
+                }
+                time = shelper;
+                return time;
             }
         }
     }

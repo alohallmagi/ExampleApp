@@ -16,21 +16,23 @@ using System.Data;
 
 namespace testApp
 {
-    public partial class CNViewModel
+    public partial class AppViewModel
     {
 
         public DateTime ListDate { get; set; }
         InterstitalEvent iEvent;
-        TLCDCAudios rusAudios;
+        AppAudios rusAudios;
         private bool _isFiller;
         private bool _isInterstitalsOpened = true;
         private string _tlcSubStringText;
         private string _dcSubStringText;
+
         private readonly ICommand cnsweInterstitalCommand;
         private readonly ICommand tlcInterstitalCommand;
         private readonly ICommand dcInterstitalCommand;
         private readonly ICommand dcIDInterstitalCommand;
         private readonly ICommand applyAudiosCommand;
+        private readonly ICommand applySonyAudiosCommand;
         private readonly ICommand applyOptionsCommand;
         private readonly ICommand dateCommand;
         private readonly ICommand listDateCommand;
@@ -42,6 +44,9 @@ namespace testApp
         private readonly ICommand openTLCCommand;
         private readonly ICommand openDCCommand;
         private readonly ICommand openDCIDCommand;
+        private readonly ICommand openTNTCommand;
+        private readonly ICommand openSONYLVACommand;
+        private readonly ICommand openSONYESTCommand;
         private readonly ICommand saveInterstitalsCommand;
         private readonly ICommand openFillersCommand;
         private readonly ICommand openLogosCommand;
@@ -52,15 +57,18 @@ namespace testApp
         private readonly ICommand commercialReader;
         private readonly ICommand openCommercialReader;
         private readonly ICommand applyDCIDCommand;
+
         ReadExcel excelfile = new ReadExcel();
         ReadText textfile = new ReadText();
         Utility utility = new Utility();
         XML xml = new XML();
+
         private MainWindow _MW;
         private OptionsView _OV;
         private CommercialReader _CR;
-
-        public CNViewModel(MainWindow MW)
+        
+        public AppViewModel() { }
+        public AppViewModel(MainWindow MW)
         {
             Utility.ListType = "CNSWE";
             this._MW = MW;
@@ -72,6 +80,9 @@ namespace testApp
             this.openLogosCommand = new RelayCommand(this.OpenLogos);
             this.openFillersCommand = new RelayCommand(this.OpenFillers);
             this.openCnSWECommand = new RelayCommand(this.OpenCNSWE);
+            this.openSONYLVACommand = new RelayCommand(this.OpenSONYLVA);
+            this.openSONYESTCommand = new RelayCommand(this.OpenSONYEST);
+            this.openTNTCommand = new RelayCommand(this.OpenTNT);
             this.openDCCommand = new RelayCommand(this.OpenDC);
             this.openTLCCommand = new RelayCommand(this.OpenTLC);
             this.openDCIDCommand = new RelayCommand(this.OpenDCID);
@@ -87,7 +98,7 @@ namespace testApp
 
             ListType(Utility.ListType);
         }
-        public CNViewModel(OptionsView OV)
+        public AppViewModel(OptionsView OV)
         {
             this._OV = OV;
             this.openDefailtLocationCommand = new RelayCommand(this.OpenDefaultLocation);
@@ -95,7 +106,13 @@ namespace testApp
             this.applyOptionsCommand = new RelayCommand(this.ApplyOptions);
             this.applyAudiosCommand = new RelayCommand(this.ApplyAudios);
             this.applyDCIDCommand = new RelayCommand(this.ApplyDCIDChanges);
-            FillRusAudioDGV();
+            this.applySonyAudiosCommand = new RelayCommand(this.ApplySonyAudios);
+
+            _OV.dgv_openAudios.ItemsSource = RusAudios(Utility.TLCDCRusAudioPath).russianAudios;
+            _OV.dgv_openSonyAudios.ItemsSource = RusAudios(Utility.SonyRusAudioPath).russianAudios;
+
+            _OV.tb_SonyestAudio.Text = Properties.Settings.Default.sonyEstAudioExt;
+            _OV.tb_SonyrusAudio.Text = Properties.Settings.Default.sonyRusAudioExt;
             _OV.tb_rusAudio.Text = Properties.Settings.Default.tlcdcRusAudioExtension;
             _OV.tb_estAudio.Text = Properties.Settings.Default.tlcdcEstAudioExtension;
             _OV.tb_cnsweComStartRow.Text = Properties.Settings.Default.cnsweComStartRow.ToString();
@@ -110,9 +127,11 @@ namespace testApp
             _OV.tb_dcConfitionLength.Text = Properties.Settings.Default.dcConditionLength.ToString();
             _OV.tb_tlcConditionStartIndex.Text = Properties.Settings.Default.tlcConditionStartIndex.ToString();
             _OV.tb_tlcConfitionLength.Text = Properties.Settings.Default.tlcConditionLength.ToString();
+            _OV.tb_tntComStartRow.Text = Properties.Settings.Default.TNTComStartRow.ToString();
             UseTransistion = Properties.Settings.Default.useTransistion;
             UseFindReplace = Properties.Settings.Default.useFindReplace;
             UseRusAudios = Properties.Settings.Default.tlcdcUseRusAudios;
+            UseSonyRusAudios = Properties.Settings.Default.sonyUseRusAudio;
             UseDCIDAudioExtension = Properties.Settings.Default.dcIDUseAudioExtension;
             _OV.tb_eventTransistionDuration.Text = Properties.Settings.Default.transistionDuration;
             _OV.tb_findWord.Text = Properties.Settings.Default.dcidFindWord;
@@ -126,11 +145,12 @@ namespace testApp
             }
             _OV.cb_useTransistion.IsChecked = Properties.Settings.Default.useTransistion;
         }
-        public CNViewModel(CommercialReader CR)
+        public AppViewModel(CommercialReader CR)
         {
             this._CR = CR;
             this.commercialReader = new RelayCommand(this.CommercialReaderDCID);
         }
+
         public ICommand CommercialReaderCommand
         {
             get { return this.openCommercialReader; }
@@ -158,6 +178,10 @@ namespace testApp
         public ICommand ApplyAudiosCommand
         {
             get { return this.applyAudiosCommand; }
+        }
+        public ICommand ApplySonyAudiosCommand
+        {
+            get { return this.applySonyAudiosCommand; }
         }
         public ICommand ApplyOptionsCommand
         {
@@ -235,11 +259,25 @@ namespace testApp
         {
             get { return this.openDCCommand; }
         }
+        public ICommand OpenTNTCommand
+        {
+            get { return this.openTNTCommand; }
+        }
+        public ICommand OpenSONYLVACommand
+        {
+            get { return this.openSONYLVACommand; }
+        }
+        public ICommand OpenSONYESTCommand
+        {
+            get { return this.openSONYESTCommand; }
+        }
 
         public bool UseTransistion { get; set; }
         public bool UseRusAudios { get; set; }
+        public bool UseSonyRusAudios { get; set; }
         public bool UseFindReplace { get; set; }
         public bool UseDCIDAudioExtension { get; set; }
+
         public string DCConditionStartIndex
         {
             get
@@ -332,6 +370,7 @@ namespace testApp
 
             }
         }
+
         private void CNsweInterstitals(object state)
         {
             Utility.InterstitalType = "CNSWE";
@@ -359,6 +398,10 @@ namespace testApp
                 if (!String.IsNullOrEmpty(_OV.tb_cnsweStartTime.Text))
                 {
                     Properties.Settings.Default.cnsweStartTime = _OV.tb_cnsweStartTime.Text;
+                }
+                if (!String.IsNullOrEmpty(_OV.tb_tntComStartRow.Text))
+                {
+                    Properties.Settings.Default.TNTComStartRow = int.Parse(_OV.tb_tntComStartRow.Text);
                 }
                 if (!String.IsNullOrEmpty(_OV.tb_cnsweComStartRow.Text))
                 {
@@ -422,8 +465,25 @@ namespace testApp
                     Properties.Settings.Default.tlcdcEstAudioExtension = _OV.tb_estAudio.Text;
                 }
             }
-            SaveRusAudios();
+            SaveRusAudios(Utility.TLCDCRusAudioPath);
             Properties.Settings.Default.tlcdcUseRusAudios = UseRusAudios;
+            Properties.Settings.Default.Save();
+        }
+        private void ApplySonyAudios(object state)
+        {
+            if (System.Windows.MessageBox.Show("Audios has been saved!", "Confirm", MessageBoxButton.OK) == MessageBoxResult.OK)
+            {
+                if (!String.IsNullOrEmpty(_OV.tb_SonyrusAudio.Text))
+                {
+                    Properties.Settings.Default.tlcdcRusAudioExtension = _OV.tb_SonyrusAudio.Text;
+                }
+                if (!String.IsNullOrEmpty(_OV.tb_SonyestAudio.Text))
+                {
+                    Properties.Settings.Default.tlcdcEstAudioExtension = _OV.tb_SonyestAudio.Text;
+                }
+            }
+            SaveRusAudios(Utility.SonyRusAudioPath);
+            Properties.Settings.Default.sonyUseRusAudio = UseSonyRusAudios;
             Properties.Settings.Default.Save();
         }
         private void ApplyDCIDChanges(object state)
@@ -469,6 +529,11 @@ namespace testApp
         {
             System.Windows.Forms.MessageBox.Show(Properties.Settings.Default.verInfo);
         }
+        private void OpenTNT(object state)
+        {
+            Utility.ListType = "TNT";
+            ListType(Utility.ListType);
+        }
         private void OpenCNSWE(object state)
         {
             Utility.ListType = "CNSWE";
@@ -487,6 +552,16 @@ namespace testApp
         private void OpenDC(object state)
         {
             Utility.ListType = "DC";
+            ListType(Utility.ListType);
+        }
+        private void OpenSONYLVA(object state)
+        {
+            Utility.ListType = "SONYLVA";
+            ListType(Utility.ListType);
+        }
+        private void OpenSONYEST(object state)
+        {
+            Utility.ListType = "SONYEST";
             ListType(Utility.ListType);
         }
         private void CommercialReaderDCID(object state)
@@ -513,67 +588,6 @@ namespace testApp
                 Properties.Settings.Default.defaultSaveLocation = fbd.SelectedPath;
                 _OV.tb_saveLocation.Text = Properties.Settings.Default.defaultSaveLocation;
             }
-        }
-        private void ListType(string listtype)
-        {
-            switch (listtype)
-            {
-                case "TLC":
-                    _MW.btn_generate.IsEnabled = false;
-                    utility.CheckForSchedule(Utility.TLCFilePath, _MW);
-                    utility.populateLB(_MW, "Opened schedule: " + Path.GetFileName(Utility.ScheduleFilePath));
-                    _MW.lbl_formTitle.Content = "Playlist Form: TLC";
-                    _MW.btn_date.Visibility = Visibility.Visible;
-                    Utility.xmlfile = @"C:\\AutomatedLists\TLC\Workflow\XML\Done.xml";
-                    Utility.fillerspath = @"C:\\AutomatedLists\TLC\Workflow\Fillers\fillers.xml";
-                    Utility.logospath = @"C:\\AutomatedLists\TLC\Workflow\Logo\logo.xml";
-                    break;
-                case "DC":
-                    _MW.btn_generate.IsEnabled = false;
-                    utility.CheckForSchedule(Utility.DCFilePath, _MW);
-                    utility.populateLB(_MW, "Opened schedule: " + Path.GetFileName(Utility.ScheduleFilePath));
-                    _MW.lbl_formTitle.Content = "Playlist Form: DC";
-                    _MW.btn_date.Visibility = Visibility.Visible;
-                    Utility.xmlfile = @"C:\\AutomatedLists\DC\Workflow\XML\Done.xml";
-                    Utility.fillerspath = @"C:\\AutomatedLists\DC\Workflow\Fillers\fillers.xml";
-                    Utility.logospath = @"C:\\AutomatedLists\DC\Workflow\Logo\logo.xml";
-                    break;
-                case "CNSWE":
-                    _MW.btn_generate.IsEnabled = true;
-                    _MW.lbl_formTitle.Content = "Playlist Form: CN SWE";
-                    _MW.btn_date.Visibility = Visibility.Collapsed;
-                    Utility.xmlfile = @"C:\\AutomatedLists\CNSWE\Workflow\XML\Done.xml";
-                    Utility.fillerspath = @"C:\\AutomatedLists\CNSWE\Workflow\Fillers\fillers.xml";
-                    Utility.logospath = @"C:\\AutomatedLists\CNSWE\Workflow\Logo\logo.xml";
-                    break;
-                case "DCID":
-                    _MW.btn_generate.IsEnabled = false;
-                    utility.CheckForSchedule(Utility.DCIDFilePath, _MW);
-                    utility.populateLB(_MW, "Opened schedule: " + Path.GetFileName(Utility.ScheduleFilePath));
-                    _MW.lbl_formTitle.Content = "Playlist Form: DC IDx";
-                    _MW.btn_date.Visibility = Visibility.Visible;
-                    Utility.xmlfile = @"C:\\AutomatedLists\DCID\Workflow\XML\Done.xml";
-                    Utility.fillerspath = @"C:\\AutomatedLists\DCID\Workflow\Fillers\fillers.xml";
-                    Utility.logospath = @"C:\\AutomatedLists\DCID\Workflow\Logo\logo.xml";
-                    break;
-            }
-        }
-        private void SaveInterstitals(object state)
-        {
-            if (_isFiller)
-            {
-                Utility.saveInterstitalEventToXML(iEvent, Utility.fillerspath);
-                System.Windows.Forms.MessageBox.Show("Fillers has been saved!");
-            }
-            if (!_isFiller)
-            {
-                Utility.saveInterstitalEventToXML(iEvent, Utility.logospath);
-                System.Windows.Forms.MessageBox.Show("Logos has been saved!");
-            }
-        }
-        private void SaveRusAudios()
-        {
-            Utility.saveTLCDCRusAudiosToXML(Utility.TLCDCRusAudioPath, rusAudios);
         }
         private void OpenFillers(object state)
         {
@@ -607,22 +621,125 @@ namespace testApp
             utility.ClearListbox();
             OpenScheduleDialog(Utility.ListType);
         }
+        private void SaveInterstitals(object state)
+        {
+            if (_isFiller)
+            {
+                Utility.saveInterstitalEventToXML(iEvent, Utility.fillerspath);
+                System.Windows.Forms.MessageBox.Show("Fillers has been saved!");
+            }
+            if (!_isFiller)
+            {
+                Utility.saveInterstitalEventToXML(iEvent, Utility.logospath);
+                System.Windows.Forms.MessageBox.Show("Logos has been saved!");
+            }
+        }
+        private void Generate(object state)
+        {
+            GenerateLists();
+        }
+
+        private void ListType(string listtype)
+        {
+            switch (listtype)
+            {
+                case "TLC":
+                    _MW.btn_generate.IsEnabled = false;
+                    utility.CheckForSchedule(Utility.TLCFilePath, _MW);
+                    utility.populateLB(_MW, "Opened schedule: " + Path.GetFileName(Utility.ScheduleFilePath));
+                    _MW.lbl_formTitle.Content = "Playlist Form: TLC";
+                    _MW.btn_date.Visibility = Visibility.Visible;
+                    _MW.btn_scheduleFile.Visibility = Visibility.Visible;
+                    _MW.lbl_scheduleFile.Visibility = Visibility.Visible;
+                    _MW.lbl_addLogo.Visibility = Visibility.Visible;
+                    _MW.btn_Interstitals.Visibility = Visibility.Visible;
+                    Utility.xmlfile = @"C:\\AutomatedLists\TLC\Workflow\XML\Done.xml";
+                    Utility.fillerspath = @"C:\\AutomatedLists\TLC\Workflow\Fillers\fillers.xml";
+                    Utility.logospath = @"C:\\AutomatedLists\TLC\Workflow\Logo\logo.xml";
+                    break;
+                case "DC":
+                    _MW.btn_generate.IsEnabled = false;
+                    utility.CheckForSchedule(Utility.DCFilePath, _MW);
+                    utility.populateLB(_MW, "Opened schedule: " + Path.GetFileName(Utility.ScheduleFilePath));
+                    _MW.lbl_formTitle.Content = "Playlist Form: DC";
+                    _MW.btn_date.Visibility = Visibility.Visible;
+                    _MW.btn_scheduleFile.Visibility = Visibility.Visible;
+                    _MW.lbl_scheduleFile.Visibility = Visibility.Visible;
+                    _MW.lbl_addLogo.Visibility = Visibility.Visible;
+                    _MW.btn_Interstitals.Visibility = Visibility.Visible;
+                    Utility.xmlfile = @"C:\\AutomatedLists\DC\Workflow\XML\Done.xml";
+                    Utility.fillerspath = @"C:\\AutomatedLists\DC\Workflow\Fillers\fillers.xml";
+                    Utility.logospath = @"C:\\AutomatedLists\DC\Workflow\Logo\logo.xml";
+                    break;
+                case "CNSWE":
+                    _MW.btn_generate.IsEnabled = true;
+                    _MW.lbl_formTitle.Content = "Playlist Form: CN SWE";
+                    _MW.btn_date.Visibility = Visibility.Collapsed;
+                    _MW.btn_scheduleFile.Visibility = Visibility.Visible;
+                    _MW.lbl_scheduleFile.Visibility = Visibility.Visible;
+                    _MW.lbl_addLogo.Visibility = Visibility.Visible;
+                    _MW.btn_Interstitals.Visibility = Visibility.Visible;
+                    Utility.xmlfile = @"C:\\AutomatedLists\CNSWE\Workflow\XML\Done.xml";
+                    Utility.fillerspath = @"C:\\AutomatedLists\CNSWE\Workflow\Fillers\fillers.xml";
+                    Utility.logospath = @"C:\\AutomatedLists\CNSWE\Workflow\Logo\logo.xml";
+                    break;
+                case "DCID":
+                    _MW.btn_generate.IsEnabled = false;
+                    utility.CheckForSchedule(Utility.DCIDFilePath, _MW);
+                    utility.populateLB(_MW, "Opened schedule: " + Path.GetFileName(Utility.ScheduleFilePath));
+                    _MW.lbl_formTitle.Content = "Playlist Form: DC IDx";
+                    _MW.btn_date.Visibility = Visibility.Visible;
+                    _MW.btn_scheduleFile.Visibility = Visibility.Visible;
+                    _MW.lbl_scheduleFile.Visibility = Visibility.Visible;
+                    _MW.lbl_addLogo.Visibility = Visibility.Visible;
+                    _MW.btn_Interstitals.Visibility = Visibility.Visible;
+                    Utility.xmlfile = @"C:\\AutomatedLists\DCID\Workflow\XML\Done.xml";
+                    Utility.fillerspath = @"C:\\AutomatedLists\DCID\Workflow\Fillers\fillers.xml";
+                    Utility.logospath = @"C:\\AutomatedLists\DCID\Workflow\Logo\logo.xml";
+                    break;
+                case "TNT":
+                    _MW.btn_generate.IsEnabled = true;
+                    _MW.lbl_formTitle.Content = "Playlist Form: TNT";
+                    _MW.btn_date.Visibility = Visibility.Collapsed;
+                    _MW.btn_scheduleFile.Visibility = Visibility.Collapsed;
+                    _MW.lbl_scheduleFile.Visibility = Visibility.Collapsed;
+                    _MW.lbl_addLogo.Visibility = Visibility.Collapsed;
+                    _MW.btn_Interstitals.Visibility = Visibility.Collapsed;
+                    break;
+                case "SONYLVA":
+                    _MW.btn_generate.IsEnabled = true;
+                    _MW.lbl_formTitle.Content = "Playlist Form: SONY LVA";
+                    _MW.btn_date.Visibility = Visibility.Collapsed;
+                    _MW.btn_scheduleFile.Visibility = Visibility.Collapsed;
+                    _MW.lbl_scheduleFile.Visibility = Visibility.Collapsed;
+                    _MW.lbl_addLogo.Visibility = Visibility.Collapsed;
+                    _MW.btn_Interstitals.Visibility = Visibility.Collapsed;
+                    break;
+                case "SONYEST":
+                    _MW.btn_generate.IsEnabled = true;
+                    _MW.lbl_formTitle.Content = "Playlist Form: SONY EST";
+                    _MW.btn_date.Visibility = Visibility.Collapsed;
+                    _MW.btn_scheduleFile.Visibility = Visibility.Collapsed;
+                    _MW.lbl_scheduleFile.Visibility = Visibility.Collapsed;
+                    _MW.lbl_addLogo.Visibility = Visibility.Collapsed;
+                    _MW.btn_Interstitals.Visibility = Visibility.Collapsed;
+                    break;
+            }
+        }
+        private void SaveRusAudios(string path)
+        {
+            Utility.saveRusAudiosToXML(path, rusAudios);
+        }      
         private void OpenCommercialDialog(string listtype)
         {
             Microsoft.Win32.OpenFileDialog opf = new Microsoft.Win32.OpenFileDialog();
             opf.Title = "Open Commercials";
             switch (listtype)
-            {
-                case "TLC":
-                    opf.Filter = "Excel Files (.xls, .xlsx)|*.xls;*.xlsx";
-                    break;
-                case "DC":
-                    opf.Filter = "Excel Files (.xls, .xlsx)|*.xls;*.xlsx";
-                    break;
+            {               
                 case "DCID":
                     opf.Filter = "IDBU Files (.idbu, .txt)|*.idbu;*.txt";
-                    break;
-                case "CNSWE":
+                    break;             
+                default:
                     opf.Filter = "Excel Files (.xls, .xlsx)|*.xls;*.xlsx";
                     break;
             }
@@ -856,30 +973,8 @@ namespace testApp
             {
                 case "CNSWE":
                     utility.CopyScheduleText(_MW);
-
                     break;
-                case "TLC":
-                    utility.clearFolder(_MW, Utility.TLCFilePath);
-                    if (!String.IsNullOrEmpty(Utility.ScheduleFilePath))
-                    {
-                        utility.CopyScheduleExcel(_MW, Utility.TLCFilePath, Properties.Settings.Default.tlcSchedulePath);
-                    }
-                    break;
-                case "DC":
-                    utility.clearFolder(_MW, Utility.DCFilePath);
-                    if (!String.IsNullOrEmpty(Utility.ScheduleFilePath))
-                    {
-                        utility.CopyScheduleExcel(_MW, Utility.DCFilePath, Properties.Settings.Default.dcSchedulePath);
-                    }
-                    break;
-                case "DCID":
-                    utility.clearFolder(_MW, Utility.DCIDFilePath);
-                    if (!String.IsNullOrEmpty(Utility.ScheduleFilePath))
-                    {
-                        utility.CopyScheduleExcel(_MW, Utility.DCIDFilePath, Properties.Settings.Default.dcIDSchedulePath);
-                    }
-                    break;
-            }
+            }            
         }
         private void fieldVisibilty()
         {
@@ -908,14 +1003,36 @@ namespace testApp
             _MW.lbStackPanel.Visibility = Visibility.Visible;
             _isInterstitalsOpened = true;
         }
-        private void Generate(object state)
-        {
-            GenerateLists();
-        }
         private void GenerateLists()
         {
             switch (Utility.ListType)
             {
+                case "TNT":
+                    if (!String.IsNullOrEmpty(Utility.CommercialFilePath))
+                    {
+                        List<Messages> messages = new List<Messages>();
+                        messages = xml.GenerateTNTCommercials();
+
+                        foreach (var item in messages)
+                        {
+                            utility.populateLB(_MW, item.getMessages());
+                        }
+
+                        if (String.IsNullOrEmpty(Utility.initError))
+                        {
+                            utility.CopyXML();
+                            Utility.IsListGenerated = true;
+                        }
+                        else
+                        {
+                            Utility.initError = string.Empty;
+                        }
+                    }
+                    else
+                    {
+                        utility.populateLB(_MW, "Missing essential info!");
+                    }
+                    break;
                 case "CNSWE":
                     if (!String.IsNullOrEmpty(Utility.CommercialFilePath) && !String.IsNullOrEmpty(Utility.ScheduleFilePath))
                     {
@@ -998,12 +1115,52 @@ namespace testApp
                         utility.populateLB(_MW, "Missing essential info!");
                     }
                     break;
+                case "SONYLVA":
+                    if (!String.IsNullOrEmpty(Utility.CommercialFilePath))
+                    {
+                        xml.GenerateTLCXML(_MW);
+                        if (String.IsNullOrEmpty(Utility.initError))
+                        {
+                            utility.CopyXML();
+                            Utility.IsListGenerated = true;
+                            _MW.btn_generate.IsEnabled = false;
+                        }
+                        else
+                        {
+                            Utility.initError = string.Empty;
+                        }
+                    }
+                    else
+                    {
+                        utility.populateLB(_MW, "Missing essential info!");
+                    }
+                    break;
+                case "SONYEST":
+                    if (!String.IsNullOrEmpty(Utility.CommercialFilePath))
+                    {
+                        xml.GenerateTLCXML(_MW);
+                        if (String.IsNullOrEmpty(Utility.initError))
+                        {
+                            utility.CopyXML();
+                            Utility.IsListGenerated = true;
+                            _MW.btn_generate.IsEnabled = false;
+                        }
+                        else
+                        {
+                            Utility.initError = string.Empty;
+                        }
+                    }
+                    else
+                    {
+                        utility.populateLB(_MW, "Missing essential info!");
+                    }
+                    break;
             }
-        }
-        private void FillRusAudioDGV()
+        }       
+        private AppAudios RusAudios(string path)
         {
-            rusAudios = Utility.readRusAudiosXML(Utility.TLCDCRusAudioPath);
-            _OV.dgv_openAudios.ItemsSource = rusAudios.russianAudios;
+            rusAudios = Utility.readRusAudiosXML(path);
+            return rusAudios;
         }
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
